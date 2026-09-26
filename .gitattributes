@@ -1,0 +1,10 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.parquet binary
+*.pkl binary
+*.joblib binary
+*.pt binary
+*.pth binary
+*.onnx binary

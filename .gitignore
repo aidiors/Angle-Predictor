@@ -1,0 +1,41 @@
+# Python environments and bytecode
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.python-version.local
+
+# Tool caches
+.ruff_cache/
+.ty_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local MLflow/runtime state
+/.mlflow/
+/mlruns/
+/mlartifacts/
+/outputs/
+/checkpoints/
+/artifacts/
+
+# Model and data artifacts
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.joblib
+
+# Local secrets
+.env
+!.env.example
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

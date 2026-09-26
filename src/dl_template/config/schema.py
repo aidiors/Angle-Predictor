@@ -1,0 +1,41 @@
+"""Validated configuration models shared by experiment entrypoints."""
+
+from __future__ import annotations
+
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class TrackingConfig(BaseModel):
+    """MLflow settings shared by every run."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    uri: str | None = None
+    experiment_name: str = "dl-ml-template"
+    system_metrics: bool = True
+
+
+class DatasetConfig(BaseModel):
+    """Dataset identity and lineage metadata, not the dataset contents."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    version: str
+    source: str
+    log_snapshot: bool = False
+
+
+class ExperimentConfig(BaseModel):
+    """Common run settings passed to a task-specific experiment entrypoint."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    entrypoint: str
+    seed: int = 42
+    tracking: TrackingConfig = Field(default_factory=TrackingConfig)
+    dataset: DatasetConfig
+    params: dict[str, Any] = Field(default_factory=dict)

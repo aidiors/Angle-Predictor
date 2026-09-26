@@ -1,0 +1,63 @@
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13"]
+build-backend = "uv_build"
+
+[project]
+name = "dl-ml-template"
+version = "0.1.0"
+description = "Reusable template for reproducible deep-learning experiments"
+readme = "README.md"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "mlflow>=3.0,<4",
+    "pydantic>=2.10,<3",
+    "PyYAML>=6,<7",
+    "python-dotenv>=1,<2",
+]
+
+[project.scripts]
+dl-template = "dl_template.cli.main:main"
+
+[tool.uv.build-backend]
+module-name = "dl_template"
+
+[tool.uv]
+default-groups = ["dev", "training"]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6,<5",
+    "ruff>=0.16,<0.17",
+    "ty>=0.0.84,<0.1",
+]
+training = [
+    "numpy>=2,<3",
+    "torch>=2.14,<2.15",
+]
+optimization = [
+    "optuna>=5,<6",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+line-ending = "lf"
+docstring-code-format = true
+
+[tool.ty.environment]
+python-version = "3.14"
+root = ["./src"]
