@@ -252,6 +252,7 @@ CPU inference is also available. An inference image must be 256 × 256 RGB
 with the target line passing through the center.
 
 ```sh
+uv sync --locked --all-groups
 uv run ruff check .
 uv run ruff format --check .
 uv run ty check src

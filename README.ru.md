@@ -268,6 +268,7 @@ uv run angle-predict --checkpoint angle-predictor-best.pt --input image.png --de
 размером 256 × 256 с целевой линией через центр.
 
 ```sh
+uv sync --locked --all-groups
 uv run ruff check .
 uv run ruff format --check .
 uv run ty check src
