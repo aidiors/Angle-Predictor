@@ -5,36 +5,53 @@
 Estimating the angle of a thin line in cluttered images with signed polar
 coordinates and a coarse-to-fine neural network.
 
-The final model reaches **0.001880° and 0.001995° validation MAE** on two
-seeds. At the same 15 600-step training budget, it reduces error by
-**45.29% and 41.66%** compared with the earlier sequential model.
+The final model reaches **0.001880° and 0.001997° validation MAE** on two
+seeds. At the same 15 600-update training budget, it reduces MAE by
+**94.25% and 93.85%** compared with a standard ConvNeXt Tiny on RGB images.
 
 ## Results
 
-Each model below received **15 600 total task-training updates**, including
-the training of any reused checkpoints. Each cell reports seed 42 / seed 43.
-All errors are in degrees.
+Each model received **15 600 total task-training updates**, including any reused
+checkpoints. Each cell reports seed 42 / seed 43 on 15 000 matching validation
+images per seed. All errors are in degrees.
 
 | Model | MAE ↓ | P99 ↓ | Maximum ↓ |
 | --- | ---: | ---: | ---: |
-| Earlier coarse → fine → joint model | 0.003437 / 0.003419 | 0.024526 / 0.024363 | 0.227046 / 0.676586 |
-| Coarse and fine trained jointly from ImageNet initialization | 0.006239 / 0.007074 | 0.043590 / 0.045649 | 3.353607 / 3.762028 |
-| Improved refinement with 64 final CNN channels, frozen coarse | 0.001972 / 0.002058 | 0.018069 / 0.018716 | 0.459905 / 1.026583 |
-| **Final refinement with 128 final CNN channels, frozen coarse** | **0.001880 / 0.001995** | **0.016715 / 0.018106** | 0.423626 / 1.050872 |
+| Plain ConvNeXt Tiny on RGB | 0.032679 / 0.032459 | 0.278369 / 0.255570 | 2.702152 / 4.141962 |
+| Spatial head and local RGB refinement | 0.009159 / 0.005435 | 0.041323 / 0.042328 | 60.444824 / 3.282609 |
+| **Final polar model** | 0.001880 / 0.001997 | 0.016774 / 0.018103 | 0.425582 / 1.051895 |
 
-The final model was selected for MAE and P99. Joint fine-tuning of a different
-64-channel refinement model produced smaller maximum errors of 0.191248° and
-0.357315°, but worse mean accuracy. The search exposed this tradeoff rather
-than finding one model that won on every metric.
+The RGB control keeps the stock ConvNeXt architecture apart from its two angle
+outputs. The middle model adds a spatial head and local Cartesian refinement
+without polar resampling. The final pipeline reduces P99 error by
+**93.97% and 92.92%** relative to the stock RGB control.
+This compares complete training recipes, with equal update counts rather than
+equal computation. It does not isolate polar geometry from the other changes.
 
-![Precision and rare errors at equal training cost](docs/reports/architecture-search/figures/precision-and-tail.png)
+![Accuracy compared with plain ConvNeXt](docs/reports/cartesian-comparison/figures/quality.png)
+
+The [RGB and polar comparison report](docs/reports/cartesian-comparison/README.md)
+covers training curves, difficult subsets, large errors and computational cost.
+
+## Prediction examples
+
+Selected validation examples show the input, its polar representation and the
+predictions from plain ConvNeXt and the final model. Green dashed lines indicate
+the reference orientation and red lines indicate the prediction. Numerical
+labels show errors that are too small to distinguish visually.
+
+![Clear line and predicted angle](docs/reports/cartesian-comparison/figures/clear-line.png)
+
+![Faint line and predicted angle](docs/reports/cartesian-comparison/figures/faint-line.png)
+
+![Difficult line near the angular seam](docs/reports/cartesian-comparison/figures/near-seam.png)
 
 ## What changed during the research
 
 The starting point was an ImageNet-initialized ConvNeXt Tiny operating on a
 polar image. Its tuned standalone MAE was 0.010441° and 0.010615° after
 5 200 steps. The work covered data generation, angle representation, loss and
-optimizer selection, then 113 completed architecture trials.
+optimizer selection, then 121 completed architecture training runs.
 
 Smaller backbones and pruned Tiny variants reduced computation but did not
 preserve accuracy under the tested recipe. Error analysis showed two different
@@ -120,9 +137,8 @@ detail.
 The geometry relies on the target passing through the center. An off-center
 line becomes a curved trace, and clutter can still produce competing
 responses. Polar coordinates organize the evidence, while the learned coarse
-branch decides which line to follow. The architecture comparisons above keep
-this transform fixed, so their measured gains belong to the refinement and
-training changes.
+branch decides which line to follow. Earlier refinement studies kept this transform fixed. The RGB comparison
+tests the complete pipeline, including its representation and training recipe.
 
 ## Final architecture
 
@@ -149,7 +165,7 @@ axis when crossing the 0°/180° seam, following
 | Aggregation | Radial mean and maximum, retaining all angular positions |
 | Correction head | MLP 16 642 → 128 → 1, conditioned on the coarse vector |
 | Output | Continuous correction δ = 4° × tanh(z), applied to the coarse vector |
-| Parameters | 34 033 768, an 8.51% increase over standalone Tiny |
+| Parameters | 34 033 768, 22.33% more than the stock RGB ConvNeXt Tiny |
 
 The fine branch measures from the detailed polar image instead of the
 backbone's compressed feature map. Dense angular sampling is interpolation,
@@ -173,18 +189,19 @@ The `synthetic_lines_150k` dataset contains 150 000 images with finite target
 lines, distracting geometry, background layers, occlusion and noise.
 Each seed defines a 120 000 / 15 000 / 15 000 train, validation and test split.
 Comparisons match validation indices within each seed and preserve the data,
-labels, loss, optimizer and preprocessing. The independent test split was
+labels, loss, optimizer, augmentation and normalization settings. The independent test split was
 not used during model selection.
 
-On an RTX 5070, recorded single-image latency was **13.26 ms and 13.03 ms**,
-compared with 10.90 ms and 10.75 ms for standalone coarse in the same paired
-measurements. These PyTorch BF16 timings include preprocessing with inputs
-already on the GPU, excluding image loading and host-to-device transfer.
+On an RTX 5070, matched single-image latency was **14.15 ms and 14.91 ms**
+for the final model, compared with **10.89 ms and 11.12 ms** for plain ConvNeXt Tiny.
+These PyTorch BF16 medians include preprocessing with inputs already on the GPU,
+excluding image loading and host-to-device transfer.
 
 ## Reports and measurements
 
 | Study | Evidence |
 | --- | --- |
+| [RGB controls and polar refinement](docs/reports/cartesian-comparison/README.md) | Stock ConvNeXt, Cartesian refinement, matched budgets and prediction examples |
 | [Architecture search and final selection](docs/reports/architecture-search/README.md) | Equal-budget comparisons, architecture details, difficult cases and latency |
 | [Backbone comparison](docs/reports/backbone-comparison/README.md) | Compact backbones, local refinement and global line-selection failures |
 | [Joint fine-tuning and shared features](docs/reports/end-to-end-comparison/README.md) | Sequential pretraining, joint continuation and multiscale fusion |
@@ -222,8 +239,13 @@ the data split, dataset fingerprint, preprocessing and architecture.
 
 For inference with a complete checkpoint:
 
+Download the selected seed 42 weights from the
+[model release](https://github.com/aidiors/Angle-Predictor/releases/tag/v0.1.0).
+The checkpoint includes the preprocessing and architecture metadata needed
+by the inference loader.
+
 ```sh
-uv run angle-predict --checkpoint checkpoints/model.pt --input image.png --device cuda
+uv run angle-predict --checkpoint angle-predictor-best.pt --input image.png --device cuda
 ```
 
 CPU inference is also available. An inference image must be 256 × 256 RGB

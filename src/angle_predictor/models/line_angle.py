@@ -13,11 +13,14 @@ from torch.nn import functional as F
 from angle_predictor.config.angle_experiment import (
     AngleExperimentParams,
     AngleModelConfig,
+    CartesianConvNeXtConfig,
+    CartesianRefinementConfig,
     PolarLineModelConfig,
     PolarRefinementModelConfig,
     SharedPolarModelConfig,
 )
 from angle_predictor.data.angle_transforms import AngleBatchPreprocessor
+from angle_predictor.models.cartesian import CartesianConvNeXt, CartesianRefinement
 from angle_predictor.models.polar_line import PolarLineModel
 from angle_predictor.models.polar_refinement import PolarRefinementModel
 
@@ -217,7 +220,7 @@ class AnglePredictor(nn.Module):
     def __init__(
         self,
         preprocessor: AngleBatchPreprocessor,
-        network: LineAngleModel | PolarLineModel | PolarRefinementModel | SharedPolarModel,
+        network: nn.Module,
         inference_precision: Literal["bf16", "fp32"] = "fp32",
     ) -> None:
         super().__init__()
@@ -241,11 +244,38 @@ def build_angle_network(
     config: AngleModelConfig
     | PolarLineModelConfig
     | PolarRefinementModelConfig
-    | SharedPolarModelConfig,
+    | SharedPolarModelConfig
+    | CartesianConvNeXtConfig
+    | CartesianRefinementConfig,
     *,
     load_pretrained: bool = True,
     training_params: AngleExperimentParams | None = None,
-) -> LineAngleModel | PolarLineModel | PolarRefinementModel | SharedPolarModel:
+) -> nn.Module:
+    if isinstance(config, CartesianRefinementConfig):
+        coarse = build_angle_network(config.coarse_model, load_pretrained=False)
+        if load_pretrained:
+            if training_params is None:
+                raise ValueError("Cartesian refinement requires experiment context")
+            payload = torch.load(config.coarse_checkpoint, map_location="cpu", weights_only=True)
+            _validate_refinement_source(payload, config, training_params)
+            coarse.load_state_dict(
+                {
+                    key.removeprefix("network."): value
+                    for key, value in payload["model_state_dict"].items()
+                    if key.startswith("network.")
+                },
+                strict=True,
+            )
+        options = config.model_dump(
+            exclude={
+                "kind",
+                "coarse_model",
+                "coarse_checkpoint",
+                "coarse_run_id",
+                "coarse_split_seed",
+            }
+        )
+        return CartesianRefinement(coarse, **options)
     if isinstance(config, PolarRefinementModelConfig):
         payload = None
         if load_pretrained and config.initialization == "checkpoint":
@@ -287,11 +317,15 @@ def build_angle_network(
         options["pretrained"] = False
     if isinstance(config, SharedPolarModelConfig):
         return SharedPolarModel(**options)
+    if isinstance(config, CartesianConvNeXtConfig):
+        return CartesianConvNeXt(**options)
     return LineAngleModel(**options)
 
 
 def _validate_refinement_source(
-    payload: dict[str, Any], config: PolarRefinementModelConfig, params: AngleExperimentParams
+    payload: dict[str, Any],
+    config: PolarRefinementModelConfig | CartesianRefinementConfig,
+    params: AngleExperimentParams,
 ) -> None:
     """Reject coarse weights from different splits, pixels, geometry or model definitions."""
     metadata = payload["metadata"]

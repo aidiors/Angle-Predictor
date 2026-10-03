@@ -1,0 +1,257 @@
+{
+  "42": {
+    "subsets": {
+      "all": {
+        "samples": 15000,
+        "plain": 0.032679116227405096,
+        "continuation": 0.009158913112965836,
+        "polar": 0.001880188357109834
+      },
+      "matched_ordinary": {
+        "samples": 14654,
+        "plain": 0.026885377109190103,
+        "continuation": 0.003774113197500917,
+        "polar": 0.001486096507752368
+      },
+      "weakest_contrast_quintile": {
+        "samples": 3000,
+        "plain": 0.06043405762844926,
+        "continuation": 0.03155277845186394,
+        "polar": 0.0041816054078792604
+      },
+      "seam_within_2_5_deg": {
+        "samples": 390,
+        "plain": 0.04984590196998817,
+        "continuation": 0.16738694714488656,
+        "polar": 0.007265705728439524
+      },
+      "vertical_within_2_5_deg": {
+        "samples": 408,
+        "plain": 0.036641790840255505,
+        "continuation": 0.011612604371565811,
+        "polar": 0.00621808168800191
+      }
+    },
+    "comparisons": {
+      "plain": {
+        "mae_reduction_percent": 94.24651406107157,
+        "p99_reduction_percent": 93.97423001512325,
+        "worst_regressions": [
+          {
+            "dataset_index": 43400,
+            "target_deg": 89.99796618778107,
+            "baseline_deg": 0.012547281570732594,
+            "polar_deg": 0.42558205127716064,
+            "increase_deg": 0.41303476970642805
+          },
+          {
+            "dataset_index": 127995,
+            "target_deg": 87.11378424516688,
+            "baseline_deg": 0.0077187540009617805,
+            "polar_deg": 0.06543967127799988,
+            "increase_deg": 0.0577209172770381
+          },
+          {
+            "dataset_index": 80787,
+            "target_deg": 89.98737170324375,
+            "baseline_deg": 0.04879383370280266,
+            "polar_deg": 0.09952118247747421,
+            "increase_deg": 0.050727348774671555
+          },
+          {
+            "dataset_index": 75317,
+            "target_deg": 91.27762480195126,
+            "baseline_deg": 0.0025696451775729656,
+            "polar_deg": 0.04633047804236412,
+            "increase_deg": 0.043760832864791155
+          },
+          {
+            "dataset_index": 75332,
+            "target_deg": 89.49919384206738,
+            "baseline_deg": 0.008345050737261772,
+            "polar_deg": 0.044500939548015594,
+            "increase_deg": 0.03615588881075382
+          }
+        ]
+      },
+      "continuation": {
+        "mae_reduction_percent": 79.47149040590699,
+        "p99_reduction_percent": 59.408377367900556,
+        "worst_regressions": [
+          {
+            "dataset_index": 50678,
+            "target_deg": 123.75542001433732,
+            "baseline_deg": 0.004447306971997023,
+            "polar_deg": 0.07624293118715286,
+            "increase_deg": 0.07179562421515584
+          },
+          {
+            "dataset_index": 45097,
+            "target_deg": 43.546409759604906,
+            "baseline_deg": 0.007477456238120794,
+            "polar_deg": 0.06746930629014969,
+            "increase_deg": 0.059991850052028894
+          },
+          {
+            "dataset_index": 20058,
+            "target_deg": 0.3677091150532149,
+            "baseline_deg": 0.09218195825815201,
+            "polar_deg": 0.1518939733505249,
+            "increase_deg": 0.059712015092372894
+          },
+          {
+            "dataset_index": 80787,
+            "target_deg": 89.98737170324375,
+            "baseline_deg": 0.043825190514326096,
+            "polar_deg": 0.09952118247747421,
+            "increase_deg": 0.05569599196314812
+          },
+          {
+            "dataset_index": 127995,
+            "target_deg": 87.11378424516688,
+            "baseline_deg": 0.010564381256699562,
+            "polar_deg": 0.06543967127799988,
+            "increase_deg": 0.054875290021300316
+          }
+        ]
+      }
+    },
+    "cartesian_coarse_outside_correction_window": [
+      {
+        "dataset_index": 16103,
+        "coarse_error_deg": 4.266353607177734,
+        "refined_error_deg": 3.332606315612793
+      },
+      {
+        "dataset_index": 114431,
+        "coarse_error_deg": 60.36343002319336,
+        "refined_error_deg": 60.44482421875
+      }
+    ]
+  },
+  "43": {
+    "subsets": {
+      "all": {
+        "samples": 15000,
+        "plain": 0.0324585521299482,
+        "continuation": 0.005435217601342108,
+        "polar": 0.001997016023872457
+      },
+      "matched_ordinary": {
+        "samples": 14655,
+        "plain": 0.026805796328019313,
+        "continuation": 0.0037544439252537184,
+        "polar": 0.0015318745485011858
+      },
+      "weakest_contrast_quintile": {
+        "samples": 3000,
+        "plain": 0.059947968704162725,
+        "continuation": 0.012786030133035496,
+        "polar": 0.004519641436463152
+      },
+      "seam_within_2_5_deg": {
+        "samples": 452,
+        "plain": 0.03879128447103129,
+        "continuation": 0.01090769449472221,
+        "polar": 0.00981411738592947
+      },
+      "vertical_within_2_5_deg": {
+        "samples": 429,
+        "plain": 0.03814706989879174,
+        "continuation": 0.01064134874323744,
+        "polar": 0.005384266619060142
+      }
+    },
+    "comparisons": {
+      "plain": {
+        "mae_reduction_percent": 93.84748889637042,
+        "p99_reduction_percent": 92.91677719416566,
+        "worst_regressions": [
+          {
+            "dataset_index": 61105,
+            "target_deg": 178.03564891518496,
+            "baseline_deg": 0.34985479712486267,
+            "polar_deg": 1.051895022392273,
+            "increase_deg": 0.7020402252674103
+          },
+          {
+            "dataset_index": 38020,
+            "target_deg": 1.5689650340438221,
+            "baseline_deg": 0.01330713089555502,
+            "polar_deg": 0.08714385330677032,
+            "increase_deg": 0.0738367224112153
+          },
+          {
+            "dataset_index": 1736,
+            "target_deg": 174.23681388144823,
+            "baseline_deg": 0.05406055226922035,
+            "polar_deg": 0.12765923142433167,
+            "increase_deg": 0.07359867915511131
+          },
+          {
+            "dataset_index": 99569,
+            "target_deg": 89.40446258213964,
+            "baseline_deg": 0.003363868221640587,
+            "polar_deg": 0.060104850679636,
+            "increase_deg": 0.056740982457995415
+          },
+          {
+            "dataset_index": 8398,
+            "target_deg": 178.16060621717622,
+            "baseline_deg": 0.05122559145092964,
+            "polar_deg": 0.09177463501691818,
+            "increase_deg": 0.04054904356598854
+          }
+        ]
+      },
+      "continuation": {
+        "mae_reduction_percent": 63.25784595304267,
+        "p99_reduction_percent": 57.23212293443288,
+        "worst_regressions": [
+          {
+            "dataset_index": 61105,
+            "target_deg": 178.03564891518496,
+            "baseline_deg": 0.19483007490634918,
+            "polar_deg": 1.051895022392273,
+            "increase_deg": 0.8570649474859238
+          },
+          {
+            "dataset_index": 5753,
+            "target_deg": 179.97890186834817,
+            "baseline_deg": 0.08285120874643326,
+            "polar_deg": 0.5072636008262634,
+            "increase_deg": 0.42441239207983017
+          },
+          {
+            "dataset_index": 1736,
+            "target_deg": 174.23681388144823,
+            "baseline_deg": 0.001100514200516045,
+            "polar_deg": 0.12765923142433167,
+            "increase_deg": 0.12655871722381562
+          },
+          {
+            "dataset_index": 119705,
+            "target_deg": 46.58833989302811,
+            "baseline_deg": 0.07051302492618561,
+            "polar_deg": 0.1772654503583908,
+            "increase_deg": 0.1067524254322052
+          },
+          {
+            "dataset_index": 84485,
+            "target_deg": 101.50743591617156,
+            "baseline_deg": 0.00872044451534748,
+            "polar_deg": 0.0810539647936821,
+            "increase_deg": 0.07233352027833462
+          }
+        ]
+      }
+    },
+    "cartesian_coarse_outside_correction_window": [
+      {
+        "dataset_index": 119604,
+        "coarse_error_deg": 5.2939066886901855,
+        "refined_error_deg": 3.282609462738037
+      }
+    ]
+  }
+}

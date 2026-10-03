@@ -80,7 +80,7 @@ def pad_signed_polar_angle(image: torch.Tensor, pad: int) -> torch.Tensor:
 
 
 class AngleBatchPreprocessor(nn.Module):
-    """Convert RGB uint8 batches, optionally augment, then polarize and normalize.
+    """Convert RGB uint8 batches, optionally augment and project, then normalize.
 
     Use the same instance/configuration for training and inference. Training
     augmentation is explicit; ``eval()`` alone does not enable or disable it.
@@ -91,6 +91,7 @@ class AngleBatchPreprocessor(nn.Module):
         input_size: tuple[int, int] = (256, 256),
         output_size: tuple[int, int] = (384, 360),
         *,
+        projection: str = "signed_polar",
         mean: tuple[float, float, float] = (0.5, 0.5, 0.5),
         std: tuple[float, float, float] = (0.5, 0.5, 0.5),
         horizontal_flip_probability: float = 0.5,
@@ -114,7 +115,12 @@ class AngleBatchPreprocessor(nn.Module):
         if any(x <= 0 for x in std):
             raise ValueError("std values must be positive")
 
-        self.polar = SignedPolarTransform(input_size, output_size)
+        if projection == "signed_polar":
+            self.polar = SignedPolarTransform(input_size, output_size)
+        elif projection == "cartesian" and input_size == output_size:
+            self.polar = nn.Identity()
+        else:
+            raise ValueError("Cartesian preprocessing preserves input size without resampling")
         self.register_buffer("mean", torch.tensor(mean).view(1, 3, 1, 1))
         self.register_buffer("std", torch.tensor(std).view(1, 3, 1, 1))
         self.horizontal_flip_probability = horizontal_flip_probability

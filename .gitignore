@@ -119,3 +119,14 @@ Thumbs.db
 !/docs/reports/polar-line-architecture/sample-errors.csv
 !/docs/reports/polar-line-architecture/speed.json
 !/docs/reports/polar-line-architecture/validation.json
+!/docs/reports/cartesian-comparison/README.md
+!/docs/reports/cartesian-comparison/data/results.csv
+!/docs/reports/cartesian-comparison/data/validation-history.csv
+!/docs/reports/cartesian-comparison/data/paired-diagnostics.json
+!/docs/reports/cartesian-comparison/data/visual-examples.json
+!/docs/reports/cartesian-comparison/figures/quality.png
+!/docs/reports/cartesian-comparison/figures/error-distribution.png
+!/docs/reports/cartesian-comparison/figures/learning-curves.png
+!/docs/reports/cartesian-comparison/figures/clear-line.png
+!/docs/reports/cartesian-comparison/figures/faint-line.png
+!/docs/reports/cartesian-comparison/figures/near-seam.png

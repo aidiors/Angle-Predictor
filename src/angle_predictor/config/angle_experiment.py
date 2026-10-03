@@ -78,6 +78,7 @@ class PolarLineModelConfig(BaseModel):
 class AnglePreprocessingConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    projection: Literal["signed_polar", "cartesian"] = "signed_polar"
     output_size: tuple[int, int] = (384, 360)
     mean: tuple[float, float, float] = (0.5, 0.5, 0.5)
     std: tuple[float, float, float] = (0.5, 0.5, 0.5)
@@ -168,6 +169,42 @@ class SharedPolarModelConfig(BaseModel):
     def validate_angular_dilations(self) -> SharedPolarModelConfig:
         if any(d <= 0 for d in self.angular_dilations):
             raise ValueError("angular dilations must be positive")
+        return self
+
+
+class CartesianConvNeXtConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["cartesian_convnext"] = "cartesian_convnext"
+    backbone_name: Literal["convnext_tiny"] = "convnext_tiny"
+    pretrained: bool = True
+    head: Literal["stock", "spatial"] = "stock"
+    head_hidden: int = Field(default=256, gt=0)
+    spatial_bins: int = Field(default=4, gt=0, le=8)
+    dropout: float = Field(default=0.1, ge=0, lt=1)
+
+
+class CartesianRefinementConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["cartesian_refinement"] = "cartesian_refinement"
+    coarse_model: CartesianConvNeXtConfig
+    coarse_checkpoint: Path
+    coarse_run_id: str = Field(min_length=32, max_length=32)
+    coarse_split_seed: int = Field(ge=0)
+    crop_size: tuple[int, int] = (384, 65)
+    strip_width_px: float = Field(default=32.0, gt=0, le=256, allow_inf_nan=False)
+    window_deg: float = Field(default=4.0, gt=0, lt=90, allow_inf_nan=False)
+    fine_channels: tuple[int, ...] = (16, 32, 128)
+    refinement_hidden: int = Field(default=128, gt=0)
+    train_coarse: bool = False
+
+    @model_validator(mode="after")
+    def validate_geometry(self) -> CartesianRefinementConfig:
+        if min(self.crop_size) < 8 or not self.fine_channels:
+            raise ValueError("Cartesian refinement requires a nonempty encoder and crop >=8")
+        if any(c <= 0 for c in self.fine_channels):
+            raise ValueError("fine_channels must be positive")
         return self
 
 
@@ -281,6 +318,8 @@ class AngleExperimentParams(BaseModel):
         | PolarLineModelConfig
         | PolarRefinementModelConfig
         | SharedPolarModelConfig
+        | CartesianConvNeXtConfig
+        | CartesianRefinementConfig
     ) = Field(default_factory=AngleModelConfig)
     preprocessing: AnglePreprocessingConfig = Field(default_factory=AnglePreprocessingConfig)
     loss: AngleLossConfig = Field(default_factory=AngleLossConfig)
@@ -292,6 +331,11 @@ class AngleExperimentParams(BaseModel):
 
     @model_validator(mode="after")
     def validate_model_input(self) -> AngleExperimentParams:
+        cartesian = isinstance(self.model, CartesianConvNeXtConfig | CartesianRefinementConfig)
+        if cartesian != (self.preprocessing.projection == "cartesian"):
+            raise ValueError("Cartesian networks require Cartesian preprocessing")
+        if cartesian and self.preprocessing.output_size != (256, 256):
+            raise ValueError("Cartesian comparisons preserve the native 256x256 image")
         if isinstance(self.scheduler, TwoPhaseCosineSchedulerConfig) and not (
             self.training.warmup_steps < self.scheduler.fast_decay_steps < self.training.max_steps
         ):
@@ -299,8 +343,8 @@ class AngleExperimentParams(BaseModel):
         if isinstance(self.model, PolarLineModelConfig) and self.preprocessing.output_size[0] % 2:
             raise ValueError("polar_line requires an even signed-polar radial size")
         if (
-            isinstance(self.model, PolarRefinementModelConfig)
-            and self.model.initialization == "checkpoint"
+            isinstance(self.model, PolarRefinementModelConfig | CartesianRefinementConfig)
+            and getattr(self.model, "initialization", "checkpoint") == "checkpoint"
             and self.model.coarse_split_seed != self.data.split_seed
         ):
             raise ValueError("refinement and coarse predictor must use the same split seed")

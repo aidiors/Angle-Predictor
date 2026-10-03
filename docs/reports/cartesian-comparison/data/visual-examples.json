@@ -1,0 +1,23 @@
+[
+  {
+    "dataset_index": 100801,
+    "target_deg": 37.68131485455898,
+    "plain_error_deg": 0.0365082249045372,
+    "polar_error_deg": 0.0014877006178721786,
+    "filename": "clear-line"
+  },
+  {
+    "dataset_index": 141147,
+    "target_deg": 41.15921590276599,
+    "plain_error_deg": 0.034719567745923996,
+    "polar_error_deg": 0.0008029741002246737,
+    "filename": "faint-line"
+  },
+  {
+    "dataset_index": 114431,
+    "target_deg": 0.008348247332606813,
+    "plain_error_deg": 0.6489987969398499,
+    "polar_error_deg": 0.12716317176818848,
+    "filename": "near-seam"
+  }
+]
