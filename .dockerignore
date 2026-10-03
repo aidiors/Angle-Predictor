@@ -15,3 +15,13 @@ checkpoints/
 artifacts/
 .env
 tests/
+dist/
+build/
+docs/reports/
+data/datasets/
+src/angle_predictor/data/generation/synthetic_lines/assets/
+*.pt
+*.pth
+*.onnx
+*.log
+*.db

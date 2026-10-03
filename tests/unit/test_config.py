@@ -2,8 +2,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
-from dl_template.config.loader import load_config
-from dl_template.config.schema import ExperimentConfig
+from angle_predictor.config.loader import load_config
+from angle_predictor.config.schema import ExperimentConfig
 
 EXPERIMENT_CONFIG = """\
 name: test-experiment
@@ -27,6 +27,7 @@ class ConfigTests(TestCase):
         self.assertEqual(config.name, "test-experiment")
         self.assertEqual(config.params["optimizer"], "adamw")
         self.assertFalse(config.tracking.system_metrics)
+        self.assertEqual(config.tracking.registered_model_name, "angle-predictor")
 
     def test_dotted_override_is_typed_by_yaml(self) -> None:
         config = self._load_config(["seed=7", "params.learning_rate=0.001"])

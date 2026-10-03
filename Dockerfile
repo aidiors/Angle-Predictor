@@ -18,5 +18,5 @@ COPY configs ./configs
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-dev
 
-ENTRYPOINT ["dl-template"]
+ENTRYPOINT ["angle-train"]
 CMD ["--help"]

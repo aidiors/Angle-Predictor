@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="851.4pt" height="374.76pt" viewBox="0 0 851.4 374.76" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 374.76
+L 851.4 374.76
+L 851.4 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 21.15 143.028
+L 127.17 143.028
+Q 132.75 143.028 132.75 137.484
+L 132.75 73.728
+Q 132.75 68.184 127.17 68.184
+L 21.15 68.184
+Q 15.57 68.184 15.57 73.728
+L 15.57 137.484
+Q 15.57 143.028 21.15 143.028
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 160.65 143.028
+L 283.41 143.028
+Q 288.99 143.028 288.99 137.484
+L 288.99 73.728
+Q 288.99 68.184 283.41 68.184
+L 160.65 68.184
+Q 155.07 68.184 155.07 73.728
+L 155.07 137.484
+Q 155.07 143.028 160.65 143.028
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 322.47 143.028
+L 512.19 143.028
+Q 517.77 143.028 517.77 137.484
+L 517.77 73.728
+Q 517.77 68.184 512.19 68.184
+L 322.47 68.184
+Q 316.89 68.184 316.89 73.728
+L 316.89 137.484
+Q 316.89 143.028 322.47 143.028
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 579.15 143.028
+L 819.09 143.028
+Q 824.67 143.028 824.67 137.484
+L 824.67 73.728
+Q 824.67 68.184 819.09 68.184
+L 579.15 68.184
+Q 573.57 68.184 573.57 73.728
+L 573.57 137.484
+Q 573.57 143.028 579.15 143.028
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #e6f3e9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 160.65 281.628
+L 283.41 281.628
+Q 288.99 281.628 288.99 276.084
+L 288.99 206.784
+Q 288.99 201.24 283.41 201.24
+L 160.65 201.24
+Q 155.07 201.24 155.07 206.784
+L 155.07 276.084
+Q 155.07 281.628 160.65 281.628
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 322.47 281.628
+L 512.19 281.628
+Q 517.77 281.628 517.77 276.084
+L 517.77 206.784
+Q 517.77 201.24 512.19 201.24
+L 322.47 201.24
+Q 316.89 201.24 316.89 206.784
+L 316.89 276.084
+Q 316.89 281.628 322.47 281.628
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 548.46 281.628
+L 662.85 281.628
+Q 668.43 281.628 668.43 276.084
+L 668.43 206.784
+Q 668.43 201.24 662.85 201.24
+L 548.46 201.24
+Q 542.88 201.24 542.88 206.784
+L 542.88 276.084
+Q 542.88 281.628 548.46 281.628
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 696.33 281.628
+L 819.09 281.628
+Q 824.67 281.628 824.67 276.084
+L 824.67 206.784
+Q 824.67 201.24 819.09 201.24
+L 696.33 201.24
+Q 690.75 201.24 690.75 206.784
+L 690.75 276.084
+Q 690.75 281.628 696.33 281.628
+z
+" clip-path="url(#p88fcb88a7c)" style="fill: #edf3f9; stroke: #53728f; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle" x="425.7" y="29.376" transform="rotate(-0 425.7 29.376)">Global direction first, local precision second</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="74.16" y="94.603852" transform="rotate(-0 74.16 94.603852)">RGB image</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(47.704531 115.412844)">256 × 256</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(20.618594 128.532375)">Center-aligned target</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="222.03" y="94.603852" transform="rotate(-0 222.03 94.603852)">Signed polar</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(185.025312 115.412844)">3 × 384 × 360</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(162.814375 128.532375)">Double-angle geometry</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="417.33" y="94.603852" transform="rotate(-0 417.33 94.603852)">ConvNeXt Tiny + coarse head</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(353.876875 115.501125)">Global direction vector v₀</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(348.369062 128.532375)">Frozen after coarse training</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="699.12" y="94.603852" transform="rotate(-0 699.12 94.603852)">Rotate the coarse vector</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(642.973906 116.023781)">θ̂ = (θ₀ + δ) mod 180°</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(628.744219 128.532375)">Continuous angle prediction</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 134.752588 105.8832
+Q 143.911792 105.8832 151.282142 105.8832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 146.882142 103.6832
+L 151.282142 105.8832
+L 146.882142 108.0832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 290.989182 105.8832
+Q 302.938906 105.8832 313.099776 105.8832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 308.699776 103.6832
+L 313.099776 105.8832
+L 308.699776 108.0832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 519.769182 105.8832
+Q 545.669692 105.8832 569.781347 105.8832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 565.381347 103.6832
+L 569.781347 105.8832
+L 565.381347 108.0832
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="222.03" y="229.323052" transform="rotate(-0 222.03 229.323052)">Local polar crop</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(177.464375 251.911391)">384 × 65, θ₀ ± 4°</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(189.035469 265.296547)">RGB + r + |r|</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="417.33" y="229.323052" transform="rotate(-0 417.33 229.323052)">Filtered fine CNN</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(356.346406 252.382485)">16 → 32 → 128 channels</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(345.187031 265.872329)">Kernel 5 × 23, radial stride 2</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="605.655" y="229.323052" transform="rotate(-0 605.655 229.323052)">Radial pooling</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(559.471406 252.382485)">Mean + maximum</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(564.997969 265.413735)">256 × 65 profile</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="757.71" y="229.323052" transform="rotate(-0 757.71 229.323052)">Correction MLP</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(712.75375 252.294204)">16 642 → 128 → 1</text>
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'" transform="translate(716.345937 265.794204)">δ = 4° × tanh(z)</text>
+   </g>
+   <g id="patch_13">
+    <path d="M 222.03 145.028327
+Q 222.03 172.13406 222.03 197.450938
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 224.23 193.050938
+L 222.03 197.450938
+L 219.83 193.050938
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 412.684882 143.772349
+Q 342.001252 172.133498 272.977821 199.828507
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 277.880612 200.231795
+L 272.977821 199.828507
+L 276.242126 196.148247
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 10px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #3f5e79" x="408.96" y="181.836" transform="rotate(-0 408.96 181.836)">Coarse angle locates the crop</text>
+   </g>
+   <g id="patch_15">
+    <path d="M 290.989182 241.7112
+Q 302.938906 241.7112 313.099776 241.7112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 308.699776 239.5112
+L 313.099776 241.7112
+L 308.699776 243.9112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 519.771566 241.7112
+Q 530.32579 241.7112 539.09116 241.7112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 534.69116 239.5112
+L 539.09116 241.7112
+L 534.69116 243.9112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 670.432588 241.7112
+Q 679.591792 241.7112 686.962142 241.7112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 682.562142 239.5112
+L 686.962142 241.7112
+L 682.562142 243.9112
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 757.71 199.239673
+Q 757.71 172.13394 757.71 146.817062
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+    <path d="M 755.51 151.217062
+L 757.71 146.817062
+L 759.91 151.217062
+" style="fill: none; stroke: #53728f; stroke-width: 1.6; stroke-linecap: round"/>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #3f5e79" x="771.66" y="173.52" transform="rotate(-0 771.66 173.52)">δ</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle" x="425.7" y="317.664" transform="rotate(-0 425.7 317.664)">The correction MLP also receives v₀ as orientation conditioning</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #4c5965" x="425.7" y="348.156" transform="rotate(-0 425.7 348.156)">34.03 million parameters  •  Two training regimes: coarse first, then fine with coarse frozen</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p88fcb88a7c">
+   <rect x="7.2" y="7.2" width="837" height="360.36"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -5,7 +5,7 @@ from unittest import TestCase
 import torch
 from torch import nn, optim
 
-from dl_template.engine.checkpoint import save_checkpoint
+from angle_predictor.engine.checkpoint import save_checkpoint
 
 
 class CheckpointTests(TestCase):

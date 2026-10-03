@@ -1,0 +1,11 @@
+{
+  "dataset_index": 144765,
+  "true_angle_deg": 169.93446376017116,
+  "convnextv2_nano_angle_deg": 173.16583,
+  "baseline_angle_deg": 170.39133,
+  "nano_refinement_angle_deg": 173.22151,
+  "fine_offset_deg": 0.05567999999999529,
+  "required_offset_deg": -3.2313662398288443,
+  "gt_inside_fine_window": true,
+  "interpretation": "One validation failure; fine does not correct the coarse error even with GT inside its crop. Scalar MLP extrapolation is a hypothesis, not an established causal diagnosis."
+}

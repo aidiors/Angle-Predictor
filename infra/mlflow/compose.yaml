@@ -1,4 +1,4 @@
-name: dl-ml-template
+name: angle-predictor
 
 services:
   mlflow:
@@ -8,7 +8,9 @@ services:
     ports:
       - "127.0.0.1:5001:5000"
     volumes:
-      - ../../.mlflow:/mlflow
+      - type: bind
+        source: ${MLFLOW_DATA_DIR:-../../.mlflow}
+        target: /mlflow
     command:
       - mlflow
       - server

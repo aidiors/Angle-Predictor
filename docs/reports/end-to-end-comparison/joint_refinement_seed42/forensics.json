@@ -1,0 +1,685 @@
+{
+  "groups": {
+    "all": {
+      "samples": 15000,
+      "baseline_mae_deg": 0.010441042321546424,
+      "candidate_mae_deg": 0.0034367775191416028,
+      "candidate_minus_baseline_deg": -0.007004264802404822,
+      "candidate_better_fraction": 0.7977333333333333,
+      "baseline_above_0.1_deg": 64,
+      "candidate_above_0.1_deg": 11
+    },
+    "seam_within_2.5_deg": {
+      "samples": 390,
+      "baseline_mae_deg": 0.029884907517307695,
+      "candidate_mae_deg": 0.011373663869336153,
+      "candidate_minus_baseline_deg": -0.01851124364797154,
+      "candidate_better_fraction": 0.7923076923076923,
+      "baseline_above_0.1_deg": 16,
+      "candidate_above_0.1_deg": 6
+    },
+    "vertical_within_2.5_deg": {
+      "samples": 408,
+      "baseline_mae_deg": 0.020014959108318627,
+      "candidate_mae_deg": 0.008560359327254902,
+      "candidate_minus_baseline_deg": -0.011454599781063727,
+      "candidate_better_fraction": 0.7843137254901961,
+      "baseline_above_0.1_deg": 7,
+      "candidate_above_0.1_deg": 1
+    },
+    "away_from_both_axes": {
+      "samples": 14202,
+      "baseline_mae_deg": 0.009632053061206333,
+      "candidate_mae_deg": 0.0030716312683117123,
+      "candidate_minus_baseline_deg": -0.006560421792894623,
+      "candidate_better_fraction": 0.798267849598648,
+      "baseline_above_0.1_deg": 41,
+      "candidate_above_0.1_deg": 4
+    },
+    "pixel_target_contrast_quintile_Q1": {
+      "samples": 3000,
+      "baseline_mae_deg": 0.01696668874448867,
+      "candidate_mae_deg": 0.006913030396580287,
+      "candidate_minus_baseline_deg": -0.01005365834790838,
+      "candidate_better_fraction": 0.7533333333333333,
+      "baseline_above_0.1_deg": 46,
+      "candidate_above_0.1_deg": 10
+    },
+    "pixel_target_contrast_quintile_Q2": {
+      "samples": 3000,
+      "baseline_mae_deg": 0.010134618645369834,
+      "candidate_mae_deg": 0.003099102592891067,
+      "candidate_minus_baseline_deg": -0.0070355160524787665,
+      "candidate_better_fraction": 0.8023333333333333,
+      "baseline_above_0.1_deg": 8,
+      "candidate_above_0.1_deg": 1
+    },
+    "pixel_target_contrast_quintile_Q3": {
+      "samples": 3000,
+      "baseline_mae_deg": 0.008596142426511832,
+      "candidate_mae_deg": 0.0024071878032387866,
+      "candidate_minus_baseline_deg": -0.006188954623273046,
+      "candidate_better_fraction": 0.8113333333333334,
+      "baseline_above_0.1_deg": 2,
+      "candidate_above_0.1_deg": 0
+    },
+    "pixel_target_contrast_quintile_Q4": {
+      "samples": 3000,
+      "baseline_mae_deg": 0.00829853172046132,
+      "candidate_mae_deg": 0.00237565115629874,
+      "candidate_minus_baseline_deg": -0.0059228805641625805,
+      "candidate_better_fraction": 0.808,
+      "baseline_above_0.1_deg": 5,
+      "candidate_above_0.1_deg": 0
+    },
+    "pixel_target_contrast_quintile_Q5": {
+      "samples": 3000,
+      "baseline_mae_deg": 0.008209230070900466,
+      "candidate_mae_deg": 0.0023889156466991336,
+      "candidate_minus_baseline_deg": -0.005820314424201334,
+      "candidate_better_fraction": 0.8136666666666666,
+      "baseline_above_0.1_deg": 3,
+      "candidate_above_0.1_deg": 0
+    },
+    "pixel_target_support_below_0.25": {
+      "samples": 506,
+      "baseline_mae_deg": 0.026449992910294467,
+      "candidate_mae_deg": 0.011666660773077073,
+      "candidate_minus_baseline_deg": -0.01478333213721739,
+      "candidate_better_fraction": 0.717391304347826,
+      "baseline_above_0.1_deg": 18,
+      "candidate_above_0.1_deg": 4
+    },
+    "pixel_target_support_at_least_0.75": {
+      "samples": 10245,
+      "baseline_mae_deg": 0.008566601695637761,
+      "candidate_mae_deg": 0.002426265168185802,
+      "candidate_minus_baseline_deg": -0.0061403365274519586,
+      "candidate_better_fraction": 0.8131771595900439,
+      "baseline_above_0.1_deg": 13,
+      "candidate_above_0.1_deg": 1
+    },
+    "angle_000_010": {
+      "samples": 846,
+      "baseline_mae_deg": 0.020239394615998225,
+      "candidate_mae_deg": 0.005050755727128959,
+      "candidate_minus_baseline_deg": -0.015188638888869269,
+      "candidate_better_fraction": 0.8557919621749409,
+      "baseline_above_0.1_deg": 18,
+      "candidate_above_0.1_deg": 2
+    },
+    "angle_010_020": {
+      "samples": 812,
+      "baseline_mae_deg": 0.009376969091784483,
+      "candidate_mae_deg": 0.0027605384092951974,
+      "candidate_minus_baseline_deg": -0.006616430682489286,
+      "candidate_better_fraction": 0.8165024630541872,
+      "baseline_above_0.1_deg": 2,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_020_030": {
+      "samples": 786,
+      "baseline_mae_deg": 0.009816681890099236,
+      "candidate_mae_deg": 0.0026697057373835874,
+      "candidate_minus_baseline_deg": -0.007146976152715649,
+      "candidate_better_fraction": 0.8562340966921119,
+      "baseline_above_0.1_deg": 3,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_030_040": {
+      "samples": 844,
+      "baseline_mae_deg": 0.008541825101994074,
+      "candidate_mae_deg": 0.002540721137407417,
+      "candidate_minus_baseline_deg": -0.0060011039645866595,
+      "candidate_better_fraction": 0.7808056872037915,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_040_050": {
+      "samples": 794,
+      "baseline_mae_deg": 0.00935257744984383,
+      "candidate_mae_deg": 0.00554443369411461,
+      "candidate_minus_baseline_deg": -0.003808143755729219,
+      "candidate_better_fraction": 0.6020151133501259,
+      "baseline_above_0.1_deg": 3,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_050_060": {
+      "samples": 820,
+      "baseline_mae_deg": 0.008591744263521342,
+      "candidate_mae_deg": 0.0023011928931818294,
+      "candidate_minus_baseline_deg": -0.006290551370339513,
+      "candidate_better_fraction": 0.8609756097560975,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_060_070": {
+      "samples": 860,
+      "baseline_mae_deg": 0.007918229170698838,
+      "candidate_mae_deg": 0.0022742326195740233,
+      "candidate_minus_baseline_deg": -0.005643996551124813,
+      "candidate_better_fraction": 0.8069767441860465,
+      "baseline_above_0.1_deg": 0,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_070_080": {
+      "samples": 856,
+      "baseline_mae_deg": 0.00790220375371028,
+      "candidate_mae_deg": 0.002592823876528038,
+      "candidate_minus_baseline_deg": -0.005309379877182243,
+      "candidate_better_fraction": 0.7885514018691588,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_080_090": {
+      "samples": 844,
+      "baseline_mae_deg": 0.012173738623043601,
+      "candidate_mae_deg": 0.00458992261010782,
+      "candidate_minus_baseline_deg": -0.007583816012935783,
+      "candidate_better_fraction": 0.7938388625592417,
+      "baseline_above_0.1_deg": 6,
+      "candidate_above_0.1_deg": 1
+    },
+    "angle_090_100": {
+      "samples": 871,
+      "baseline_mae_deg": 0.011519532069955225,
+      "candidate_mae_deg": 0.004381332951185878,
+      "candidate_minus_baseline_deg": -0.007138199118769346,
+      "candidate_better_fraction": 0.8025258323765786,
+      "baseline_above_0.1_deg": 4,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_100_110": {
+      "samples": 820,
+      "baseline_mae_deg": 0.007187436039646341,
+      "candidate_mae_deg": 0.002491535392098171,
+      "candidate_minus_baseline_deg": -0.004695900647548171,
+      "candidate_better_fraction": 0.7841463414634147,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_110_120": {
+      "samples": 866,
+      "baseline_mae_deg": 0.008764487762547346,
+      "candidate_mae_deg": 0.0025057221615816397,
+      "candidate_minus_baseline_deg": -0.006258765600965705,
+      "candidate_better_fraction": 0.836027713625866,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_120_130": {
+      "samples": 814,
+      "baseline_mae_deg": 0.007801719363433858,
+      "candidate_mae_deg": 0.002407768611321818,
+      "candidate_minus_baseline_deg": -0.005393950752112039,
+      "candidate_better_fraction": 0.8034398034398035,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_130_140": {
+      "samples": 849,
+      "baseline_mae_deg": 0.009286707152695407,
+      "candidate_mae_deg": 0.006187169340528857,
+      "candidate_minus_baseline_deg": -0.003099537812166549,
+      "candidate_better_fraction": 0.6395759717314488,
+      "baseline_above_0.1_deg": 1,
+      "candidate_above_0.1_deg": 2
+    },
+    "angle_140_150": {
+      "samples": 798,
+      "baseline_mae_deg": 0.008390740795125314,
+      "candidate_mae_deg": 0.0028016939054235092,
+      "candidate_minus_baseline_deg": -0.005589046889701804,
+      "candidate_better_fraction": 0.8057644110275689,
+      "baseline_above_0.1_deg": 2,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_150_160": {
+      "samples": 838,
+      "baseline_mae_deg": 0.008467528482267304,
+      "candidate_mae_deg": 0.00243220654675179,
+      "candidate_minus_baseline_deg": -0.006035321935515514,
+      "candidate_better_fraction": 0.8078758949880668,
+      "baseline_above_0.1_deg": 2,
+      "candidate_above_0.1_deg": 0
+    },
+    "angle_160_170": {
+      "samples": 854,
+      "baseline_mae_deg": 0.012122727079586651,
+      "candidate_mae_deg": 0.003059245722564988,
+      "candidate_minus_baseline_deg": -0.009063481357021664,
+      "candidate_better_fraction": 0.8430913348946136,
+      "baseline_above_0.1_deg": 7,
+      "candidate_above_0.1_deg": 2
+    },
+    "angle_170_180": {
+      "samples": 828,
+      "baseline_mae_deg": 0.02021417966647947,
+      "candidate_mae_deg": 0.005226371861143237,
+      "candidate_minus_baseline_deg": -0.014987807805336232,
+      "candidate_better_fraction": 0.8707729468599034,
+      "baseline_above_0.1_deg": 10,
+      "candidate_above_0.1_deg": 4
+    }
+  },
+  "interpretation": "Paired validation diagnostics; angle bins are descriptive, not a held-out test. No scene-level length/occlusion metadata; no causal conclusion from pixel proxies.",
+  "signed_error_groups": {
+    "all": {
+      "baseline": 0.0006648072231987025,
+      "candidate": -0.00021732578490803766
+    },
+    "seam_within_2.5_deg": {
+      "baseline": -0.004540192936588283,
+      "candidate": -0.00041826222274305537
+    },
+    "vertical_within_2.5_deg": {
+      "baseline": -0.002691561524843659,
+      "candidate": -0.0003845125052354975
+    },
+    "away_from_both_axes": {
+      "baseline": 0.0009041642511890002,
+      "candidate": -0.00020700488696061753
+    },
+    "pixel_target_contrast_quintile_Q1": {
+      "baseline": -0.0009650090361202691,
+      "candidate": -0.0006016203319870641
+    },
+    "pixel_target_contrast_quintile_Q2": {
+      "baseline": 0.0007146382137264548,
+      "candidate": -0.00011524942427344816
+    },
+    "pixel_target_contrast_quintile_Q3": {
+      "baseline": 0.0009681974186594668,
+      "candidate": -8.894958134087479e-05
+    },
+    "pixel_target_contrast_quintile_Q4": {
+      "baseline": 0.0006836454910134743,
+      "candidate": -0.00015371445231982268
+    },
+    "pixel_target_contrast_quintile_Q5": {
+      "baseline": 0.0019225640287143856,
+      "candidate": -0.0001270951346189785
+    },
+    "pixel_target_support_below_0.25": {
+      "baseline": -0.0017529359900332279,
+      "candidate": -0.0025779830453695695
+    },
+    "pixel_target_support_at_least_0.75": {
+      "baseline": 0.0011600919330098426,
+      "candidate": -0.00014549302000151004
+    },
+    "angle_000_010": {
+      "baseline": -0.006861557640906342,
+      "candidate": -5.276467636756925e-05
+    },
+    "angle_010_020": {
+      "baseline": 0.000131808444683695,
+      "candidate": 4.650193452137309e-06
+    },
+    "angle_020_030": {
+      "baseline": -0.0008680517580788038,
+      "candidate": -7.900468428752061e-05
+    },
+    "angle_030_040": {
+      "baseline": -0.0016716788404783375,
+      "candidate": -3.159883132513746e-06
+    },
+    "angle_040_050": {
+      "baseline": 0.0011124690195096088,
+      "candidate": -0.0003881216605913053
+    },
+    "angle_050_060": {
+      "baseline": 0.0014194355973144155,
+      "candidate": 5.820876804599507e-05
+    },
+    "angle_060_070": {
+      "baseline": 0.0015306532740671469,
+      "candidate": -4.670137709591382e-05
+    },
+    "angle_070_080": {
+      "baseline": 0.001824683482848061,
+      "candidate": -4.250109659128853e-05
+    },
+    "angle_080_090": {
+      "baseline": -0.002033162695729855,
+      "candidate": -0.00023823023127501823
+    },
+    "angle_090_100": {
+      "baseline": -0.00014476021542492162,
+      "candidate": -0.000435067907732732
+    },
+    "angle_100_110": {
+      "baseline": -0.000614843955610164,
+      "candidate": -0.0004909463946345188
+    },
+    "angle_110_120": {
+      "baseline": 0.0019022058784992208,
+      "candidate": -0.000318537770461715
+    },
+    "angle_120_130": {
+      "baseline": 0.0016845154127550037,
+      "candidate": -0.000533233972994302
+    },
+    "angle_130_140": {
+      "baseline": 0.0021975402231648187,
+      "candidate": -0.0007502689641144017
+    },
+    "angle_140_150": {
+      "baseline": 0.0003320107898939024,
+      "candidate": -0.0005182523680003928
+    },
+    "angle_150_160": {
+      "baseline": 0.0017663014055534034,
+      "candidate": 5.9225033238124854e-05
+    },
+    "angle_160_170": {
+      "baseline": 0.005575227849601241,
+      "candidate": -2.182133072678417e-05
+    },
+    "angle_170_180": {
+      "baseline": 0.004581274225201359,
+      "candidate": -0.00012709711489503826
+    }
+  },
+  "signed_error_precision_note": "Decoded float32 angle differences can differ by microdegrees from the cross/dot MAE metric. These values diagnose bias, not the acceptance criterion.",
+  "paired_bootstrap_mae_difference_95_percent_deg": [
+    -0.007246276557174366,
+    -0.006762048777372857
+  ],
+  "examples": {
+    "worst_candidate": [
+      {
+        "dataset_index": 20058,
+        "true_angle_deg": 0.3677091150532149,
+        "baseline_error_deg": 0.22676301,
+        "candidate_error_deg": 0.22704586
+      },
+      {
+        "dataset_index": 41435,
+        "true_angle_deg": 169.0319631312921,
+        "baseline_error_deg": 0.45501727,
+        "candidate_error_deg": 0.21687764
+      },
+      {
+        "dataset_index": 43400,
+        "true_angle_deg": 89.99796618778107,
+        "baseline_error_deg": 0.41939887,
+        "candidate_error_deg": 0.21527499
+      },
+      {
+        "dataset_index": 122428,
+        "true_angle_deg": 130.22538904605204,
+        "baseline_error_deg": 0.020562286,
+        "candidate_error_deg": 0.20787309
+      },
+      {
+        "dataset_index": 15132,
+        "true_angle_deg": 179.59758225395564,
+        "baseline_error_deg": 0.099198505,
+        "candidate_error_deg": 0.18790884
+      },
+      {
+        "dataset_index": 84648,
+        "true_angle_deg": 1.1151089784937631,
+        "baseline_error_deg": 0.3162018,
+        "candidate_error_deg": 0.17038903
+      },
+      {
+        "dataset_index": 61105,
+        "true_angle_deg": 178.03564891518496,
+        "baseline_error_deg": 0.34208182,
+        "candidate_error_deg": 0.15736258
+      },
+      {
+        "dataset_index": 139148,
+        "true_angle_deg": 132.50737479437961,
+        "baseline_error_deg": 0.035035253,
+        "candidate_error_deg": 0.12106547
+      },
+      {
+        "dataset_index": 28046,
+        "true_angle_deg": 179.46026512897527,
+        "baseline_error_deg": 0.06659018,
+        "candidate_error_deg": 0.106152155
+      },
+      {
+        "dataset_index": 8398,
+        "true_angle_deg": 178.16060621717622,
+        "baseline_error_deg": 0.0041130544,
+        "candidate_error_deg": 0.10220631
+      },
+      {
+        "dataset_index": 144765,
+        "true_angle_deg": 169.93446376017116,
+        "baseline_error_deg": 0.45685488,
+        "candidate_error_deg": 0.10038264
+      },
+      {
+        "dataset_index": 48091,
+        "true_angle_deg": 140.24722445273358,
+        "baseline_error_deg": 0.0121193165,
+        "candidate_error_deg": 0.09637756
+      },
+      {
+        "dataset_index": 122591,
+        "true_angle_deg": 179.51105810250834,
+        "baseline_error_deg": 0.026550123,
+        "candidate_error_deg": 0.09387835
+      },
+      {
+        "dataset_index": 14811,
+        "true_angle_deg": 144.07008978806917,
+        "baseline_error_deg": 0.01691155,
+        "candidate_error_deg": 0.07943007
+      },
+      {
+        "dataset_index": 64652,
+        "true_angle_deg": 90.32095127559461,
+        "baseline_error_deg": 0.051234826,
+        "candidate_error_deg": 0.07910516
+      },
+      {
+        "dataset_index": 81413,
+        "true_angle_deg": 54.229404864213734,
+        "baseline_error_deg": 0.13929372,
+        "candidate_error_deg": 0.07876669
+      }
+    ],
+    "worst_regressions": [
+      {
+        "dataset_index": 122428,
+        "true_angle_deg": 130.22538904605204,
+        "baseline_error_deg": 0.020562286,
+        "candidate_error_deg": 0.20787309
+      },
+      {
+        "dataset_index": 8398,
+        "true_angle_deg": 178.16060621717622,
+        "baseline_error_deg": 0.0041130544,
+        "candidate_error_deg": 0.10220631
+      },
+      {
+        "dataset_index": 15132,
+        "true_angle_deg": 179.59758225395564,
+        "baseline_error_deg": 0.099198505,
+        "candidate_error_deg": 0.18790884
+      },
+      {
+        "dataset_index": 139148,
+        "true_angle_deg": 132.50737479437961,
+        "baseline_error_deg": 0.035035253,
+        "candidate_error_deg": 0.12106547
+      },
+      {
+        "dataset_index": 48091,
+        "true_angle_deg": 140.24722445273358,
+        "baseline_error_deg": 0.0121193165,
+        "candidate_error_deg": 0.09637756
+      },
+      {
+        "dataset_index": 122591,
+        "true_angle_deg": 179.51105810250834,
+        "baseline_error_deg": 0.026550123,
+        "candidate_error_deg": 0.09387835
+      },
+      {
+        "dataset_index": 97143,
+        "true_angle_deg": 179.7834209283303,
+        "baseline_error_deg": 0.010783294,
+        "candidate_error_deg": 0.07463106
+      },
+      {
+        "dataset_index": 14811,
+        "true_angle_deg": 144.07008978806917,
+        "baseline_error_deg": 0.01691155,
+        "candidate_error_deg": 0.07943007
+      },
+      {
+        "dataset_index": 81600,
+        "true_angle_deg": 99.02604226060623,
+        "baseline_error_deg": 0.012222624,
+        "candidate_error_deg": 0.07165816
+      },
+      {
+        "dataset_index": 60725,
+        "true_angle_deg": 6.222280900553241,
+        "baseline_error_deg": 0.0067469464,
+        "candidate_error_deg": 0.06571459
+      },
+      {
+        "dataset_index": 79204,
+        "true_angle_deg": 179.1977147973126,
+        "baseline_error_deg": 0.010023784,
+        "candidate_error_deg": 0.06792438
+      },
+      {
+        "dataset_index": 111786,
+        "true_angle_deg": 90.19799921222307,
+        "baseline_error_deg": 0.0066981213,
+        "candidate_error_deg": 0.06313243
+      },
+      {
+        "dataset_index": 39866,
+        "true_angle_deg": 90.23129102366414,
+        "baseline_error_deg": 0.0022477992,
+        "candidate_error_deg": 0.053731367
+      },
+      {
+        "dataset_index": 60827,
+        "true_angle_deg": 88.82791788845611,
+        "baseline_error_deg": 0.02397034,
+        "candidate_error_deg": 0.07415
+      },
+      {
+        "dataset_index": 41833,
+        "true_angle_deg": 166.07109210003628,
+        "baseline_error_deg": 0.024726994,
+        "candidate_error_deg": 0.07289356
+      },
+      {
+        "dataset_index": 81659,
+        "true_angle_deg": 17.50534550672629,
+        "baseline_error_deg": 0.02200004,
+        "candidate_error_deg": 0.069802895
+      }
+    ],
+    "largest_improvements": [
+      {
+        "dataset_index": 45097,
+        "true_angle_deg": 43.546409759604906,
+        "baseline_error_deg": 0.4186421,
+        "candidate_error_deg": 0.012833606
+      },
+      {
+        "dataset_index": 123199,
+        "true_angle_deg": 179.54083858730667,
+        "baseline_error_deg": 0.44665202,
+        "candidate_error_deg": 0.0456839
+      },
+      {
+        "dataset_index": 131580,
+        "true_angle_deg": 177.4346761832017,
+        "baseline_error_deg": 0.37891534,
+        "candidate_error_deg": 0.0008313621
+      },
+      {
+        "dataset_index": 144765,
+        "true_angle_deg": 169.93446376017116,
+        "baseline_error_deg": 0.45685488,
+        "candidate_error_deg": 0.10038264
+      },
+      {
+        "dataset_index": 80541,
+        "true_angle_deg": 7.71514558358338,
+        "baseline_error_deg": 0.35769606,
+        "candidate_error_deg": 0.015297917
+      },
+      {
+        "dataset_index": 50678,
+        "true_angle_deg": 123.75542001433732,
+        "baseline_error_deg": 0.2589727,
+        "candidate_error_deg": 0.011738534
+      },
+      {
+        "dataset_index": 41435,
+        "true_angle_deg": 169.0319631312921,
+        "baseline_error_deg": 0.45501727,
+        "candidate_error_deg": 0.21687764
+      },
+      {
+        "dataset_index": 122465,
+        "true_angle_deg": 179.67768099939485,
+        "baseline_error_deg": 0.22659318,
+        "candidate_error_deg": 0.0013226288
+      },
+      {
+        "dataset_index": 80787,
+        "true_angle_deg": 89.98737170324375,
+        "baseline_error_deg": 0.22806667,
+        "candidate_error_deg": 0.007491516
+      },
+      {
+        "dataset_index": 68254,
+        "true_angle_deg": 5.548337284357579,
+        "baseline_error_deg": 0.21556707,
+        "candidate_error_deg": 0.0007517477
+      },
+      {
+        "dataset_index": 43400,
+        "true_angle_deg": 89.99796618778107,
+        "baseline_error_deg": 0.41939887,
+        "candidate_error_deg": 0.21527499
+      },
+      {
+        "dataset_index": 115364,
+        "true_angle_deg": 44.26469481563275,
+        "baseline_error_deg": 0.20981184,
+        "candidate_error_deg": 0.007746235
+      },
+      {
+        "dataset_index": 109947,
+        "true_angle_deg": 5.771915437850306,
+        "baseline_error_deg": 0.19563094,
+        "candidate_error_deg": 7.000943e-05
+      },
+      {
+        "dataset_index": 107515,
+        "true_angle_deg": 71.31976857019986,
+        "baseline_error_deg": 0.19863033,
+        "candidate_error_deg": 0.013825158
+      },
+      {
+        "dataset_index": 61105,
+        "true_angle_deg": 178.03564891518496,
+        "baseline_error_deg": 0.34208182,
+        "candidate_error_deg": 0.15736258
+      },
+      {
+        "dataset_index": 20392,
+        "true_angle_deg": 23.43631067571093,
+        "baseline_error_deg": 0.17837238,
+        "candidate_error_deg": 0.007023142
+      }
+    ]
+  }
+}

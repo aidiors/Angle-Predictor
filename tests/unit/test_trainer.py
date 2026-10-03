@@ -4,7 +4,7 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader, TensorDataset
 
-from dl_template.engine.trainer import train_epochs
+from angle_predictor.engine.trainer import train_epochs
 
 
 class TrainerTests(TestCase):

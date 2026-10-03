@@ -1,0 +1,57 @@
+name: convnext_tiny_musgd_mse_seed49
+entrypoint: angle_predictor.experiments.angle:run
+seed: 49
+tracking:
+  experiment_name: angle-predictor
+  system_metrics: true
+  registered_model_name: angle-predictor
+dataset:
+  name: synthetic_lines
+  version: v12_background_sources_center_sprites
+  source: data/datasets/synthetic_lines_150k
+params:
+  data:
+    root: data/datasets/synthetic_lines_150k
+    batch_size: 32
+    num_workers: 6
+    split_seed: 49
+    train_fraction: 0.8
+    val_fraction: 0.1
+  model:
+    backbone_name: convnext_tiny
+    pretrained: true
+    out_index: 3
+    head_hidden: 256
+    dropout: 0.1
+    residual_scale: 0.25
+    normalize_output: true
+  preprocessing:
+    output_size: [384, 360]
+    mean: [0.5, 0.5, 0.5]
+    std: [0.5, 0.5, 0.5]
+    horizontal_flip_probability: 0.5
+    vertical_flip_probability: 0.5
+    jitter_probability: 0.7
+    gaussian_probability: 0.3
+    speckle_probability: 0.15
+  loss:
+    kind: mse
+  optimizer:
+    kind: musgd
+    lr: 0.0003
+    weight_decay: 0.025
+    momentum: 0.95
+    nesterov: true
+    muon: 0.7
+    sgd: 0.3
+  scheduler:
+    kind: cosine_annealing
+    eta_min: 1.0e-08
+  training:
+    max_steps: 5200
+    warmup_steps: 200
+    clip_grad_norm: 1.0
+    precision: bf16
+    log_every_steps: 50
+    validate_every_steps: 1300
+    output_dir: outputs/experiments

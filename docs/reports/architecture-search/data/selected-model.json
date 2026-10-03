@@ -1,0 +1,117 @@
+{
+  "criterion": "Lowest validation MAE and P99 among completed pairs at 15600 total task updates",
+  "dataset": "synthetic_lines_150k",
+  "samples_per_validation_split": 15000,
+  "test_used": false,
+  "completed_architecture_runs": 113,
+  "model": {
+    "kind": "polar_refinement",
+    "coarse_model": {
+      "backbone_name": "convnext_tiny",
+      "pretrained": true,
+      "out_index": 3,
+      "head_hidden": 256,
+      "dropout": 0.1,
+      "residual_scale": 0.25,
+      "normalize_output": true
+    },
+    "crop_size": [
+      384,
+      65
+    ],
+    "window_deg": 4.0,
+    "fine_channels": [
+      16,
+      32,
+      128
+    ],
+    "refinement_hidden": 128,
+    "fine_angular_kernel": 23,
+    "fine_radial_antialias": true
+  },
+  "training_stages": [
+    {
+      "stage": "coarse",
+      "new_steps": 5200,
+      "total_steps": 5200
+    },
+    {
+      "stage": "fresh_fine",
+      "new_steps": 5200,
+      "total_steps": 10400
+    },
+    {
+      "stage": "fine_continuation",
+      "new_steps": 5200,
+      "total_steps": 15600
+    }
+  ],
+  "seeds": [
+    {
+      "seed": 42,
+      "mae_deg": 0.0018802659033095867,
+      "quantiles": {
+        "0.5": 0.00080254726,
+        "0.9": 0.0038454823200000003,
+        "0.95": 0.006557472729999999,
+        "0.99": 0.01671499990000001,
+        "0.999": 0.055611453138000526,
+        "1": 0.42362583
+      },
+      "above_0_1": 6,
+      "speed": {
+        "gpu": "NVIDIA GeForce RTX 5070",
+        "torch": "2.14.0+cu130",
+        "precision": "bf16",
+        "baseline": {
+          "parameters": 31363687,
+          "inference_batch1_median_ms": 10.898199994699098,
+          "inference_batch32_median_ms": 42.48889999871608,
+          "training_batch32_median_ms": 144.49779999267776,
+          "training_peak_allocated_mib": 5664.767578125
+        },
+        "candidate": {
+          "parameters": 34033768,
+          "inference_batch1_median_ms": 13.257700004032813,
+          "inference_batch32_median_ms": 48.703499996918254,
+          "training_batch32_median_ms": 62.60900000052061,
+          "training_peak_allocated_mib": 984.94140625
+        }
+      },
+      "coarse_tensors_bitwise_unchanged": 193
+    },
+    {
+      "seed": 43,
+      "mae_deg": 0.001994853636167632,
+      "quantiles": {
+        "0.5": 0.0008066026,
+        "0.9": 0.00410076022,
+        "0.95": 0.006737128,
+        "0.99": 0.018106191940000006,
+        "0.999": 0.06029483396700204,
+        "1": 1.0508717
+      },
+      "above_0_1": 8,
+      "speed": {
+        "gpu": "NVIDIA GeForce RTX 5070",
+        "torch": "2.14.0+cu130",
+        "precision": "bf16",
+        "baseline": {
+          "parameters": 31363687,
+          "inference_batch1_median_ms": 10.752050002338365,
+          "inference_batch32_median_ms": 42.54320000472944,
+          "training_batch32_median_ms": 144.49010000680573,
+          "training_peak_allocated_mib": 5664.767578125
+        },
+        "candidate": {
+          "parameters": 34033768,
+          "inference_batch1_median_ms": 13.032999995630234,
+          "inference_batch32_median_ms": 48.78139999345876,
+          "training_batch32_median_ms": 62.83295000321232,
+          "training_peak_allocated_mib": 984.94140625
+        }
+      },
+      "coarse_tensors_bitwise_unchanged": 193
+    }
+  ]
+}

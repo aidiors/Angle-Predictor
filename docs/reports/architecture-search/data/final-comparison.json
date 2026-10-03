@@ -1,0 +1,173 @@
+{
+  "candidate": "Frozen coarse with 128-channel fine encoder and angular kernel 23",
+  "reference": "Matching frozen coarse with 64-channel fine encoder",
+  "total_steps_per_model": 15600,
+  "seeds": [
+    {
+      "seed": 42,
+      "matching_validation_indices": true,
+      "comparison": {
+        "candidate_total": 15600,
+        "reference_total": 15600,
+        "same_total": true,
+        "candidate_mae": 0.0018802659033095867,
+        "reference_mae": 0.0019716020139792212,
+        "gain_percent": 4.632583554999203,
+        "candidate_p99": 0.01671499990000001,
+        "reference_p99": 0.018069431040000007,
+        "candidate_max": 0.42362583,
+        "reference_max": 0.45990545,
+        "above_0_1": [
+          6,
+          8
+        ],
+        "matched_trim": {
+          "samples": 14981,
+          "candidate": 0.0017495414081599226,
+          "reference": 0.0018174840924296324
+        },
+        "groups": {
+          "pixel_target_contrast_quintile_Q1": {
+            "candidate": 0.004179943164528686,
+            "reference": 0.004400373158972147,
+            "samples": 3000
+          },
+          "pixel_target_support_below_0.25": {
+            "candidate": 0.0069033185513181815,
+            "reference": 0.007475478924432806,
+            "samples": 506
+          },
+          "seam_within_2.5_deg": {
+            "candidate": 0.007268520999406923,
+            "reference": 0.00813261713298718,
+            "samples": 390
+          },
+          "vertical_within_2.5_deg": {
+            "candidate": 0.006214960425063725,
+            "reference": 0.006579616923754902,
+            "samples": 408
+          },
+          "away_from_both_axes": {
+            "candidate": 0.0016077708425890087,
+            "reference": 0.0016700342080644501,
+            "samples": 14202
+          }
+        },
+        "worst_regressions": [
+          {
+            "index": 114431,
+            "candidate": 0.12772444,
+            "reference": 0.06937187
+          },
+          {
+            "index": 50678,
+            "candidate": 0.07548307,
+            "reference": 0.027923524
+          },
+          {
+            "index": 144487,
+            "candidate": 0.05199164,
+            "reference": 0.018657515
+          },
+          {
+            "index": 119921,
+            "candidate": 0.08503171,
+            "reference": 0.053966213
+          },
+          {
+            "index": 68254,
+            "candidate": 0.03545211,
+            "reference": 0.012075774
+          }
+        ]
+      },
+      "bootstrap_delta95": [
+        -0.00013023788583783693,
+        -5.350087638457325e-05
+      ]
+    },
+    {
+      "seed": 43,
+      "matching_validation_indices": true,
+      "comparison": {
+        "candidate_total": 15600,
+        "reference_total": 15600,
+        "same_total": true,
+        "candidate_mae": 0.001994853636167632,
+        "reference_mae": 0.002058440826575574,
+        "gain_percent": 3.0890948909969795,
+        "candidate_p99": 0.018106191940000006,
+        "reference_p99": 0.018715989040000002,
+        "candidate_max": 1.0508717,
+        "reference_max": 1.026583,
+        "above_0_1": [
+          8,
+          6
+        ],
+        "matched_trim": {
+          "samples": 14983,
+          "candidate": 0.0017988296008485936,
+          "reference": 0.0018777759620659154
+        },
+        "groups": {
+          "pixel_target_contrast_quintile_Q1": {
+            "candidate": 0.004509516024756754,
+            "reference": 0.004608308430119233,
+            "samples": 3000
+          },
+          "pixel_target_support_below_0.25": {
+            "candidate": 0.009158980261744748,
+            "reference": 0.009348053769899792,
+            "samples": 476
+          },
+          "seam_within_2.5_deg": {
+            "candidate": 0.009798624531466814,
+            "reference": 0.00943831224160177,
+            "samples": 452
+          },
+          "vertical_within_2.5_deg": {
+            "candidate": 0.005363339260139767,
+            "reference": 0.005635663052972727,
+            "samples": 429
+          },
+          "away_from_both_axes": {
+            "candidate": 0.0016426767980516695,
+            "reference": 0.001713492160613663,
+            "samples": 14119
+          }
+        },
+        "worst_regressions": [
+          {
+            "index": 5753,
+            "candidate": 0.5026981,
+            "reference": 0.3852225
+          },
+          {
+            "index": 1736,
+            "candidate": 0.12749146,
+            "reference": 0.013409795
+          },
+          {
+            "index": 38020,
+            "candidate": 0.087492615,
+            "reference": 0.02364569
+          },
+          {
+            "index": 66871,
+            "candidate": 0.032854926,
+            "reference": 0.007305101
+          },
+          {
+            "index": 61105,
+            "candidate": 1.0508717,
+            "reference": 1.026583
+          }
+        ]
+      },
+      "bootstrap_delta95": [
+        -9.715181868394639e-05,
+        -2.6143447905068324e-05
+      ]
+    }
+  ]
+}

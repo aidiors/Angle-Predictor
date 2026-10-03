@@ -1,0 +1,19 @@
+{
+  "gpu": "NVIDIA GeForce RTX 5070",
+  "torch": "2.14.0+cu130",
+  "precision": "bf16",
+  "baseline": {
+    "parameters": 31363687,
+    "inference_batch1_median_ms": 11.525500000061584,
+    "inference_batch32_median_ms": 46.62740000003396,
+    "training_batch32_median_ms": 157.02740000051563,
+    "training_peak_allocated_mib": 5664.392578125
+  },
+  "candidate": {
+    "parameters": 319363,
+    "inference_batch1_median_ms": 5.196000000069034,
+    "inference_batch32_median_ms": 41.967099999965285,
+    "training_batch32_median_ms": 104.40330000074027,
+    "training_peak_allocated_mib": 3290.806640625
+  }
+}

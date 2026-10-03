@@ -1,0 +1,22 @@
+{
+  "seed_split": 43,
+  "coarse_run_id": "d20c14b566454b0a8c1e5703de83c1be",
+  "window_deg": 4,
+  "samples": 15000,
+  "outside_window": [
+    {
+      "dataset_index": 119705,
+      "coarse_error_deg": 46.892536,
+      "baseline_error_deg": 0.1247934,
+      "best_possible_error_with_4deg_correction": 42.892536
+    },
+    {
+      "dataset_index": 46011,
+      "coarse_error_deg": 83.20001,
+      "baseline_error_deg": 0.026545748,
+      "best_possible_error_with_4deg_correction": 79.20001
+    }
+  ],
+  "mae_lower_bound_deg": 0.008139503066666666,
+  "basis": "Triangle inequality for undirected angular distance; offset magnitude <=4 degrees. This only bounds the composite, it is not a dataset/Bayes floor."
+}

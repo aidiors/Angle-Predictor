@@ -3,9 +3,9 @@ requires = ["uv_build>=0.12.19,<0.13"]
 build-backend = "uv_build"
 
 [project]
-name = "dl-ml-template"
+name = "angle-predictor"
 version = "0.1.0"
-description = "Reusable template for reproducible deep-learning experiments"
+description = "Line-angle estimation with signed polar geometry and coarse-to-fine refinement"
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
 dependencies = [
@@ -16,10 +16,11 @@ dependencies = [
 ]
 
 [project.scripts]
-dl-template = "dl_template.cli.main:main"
+angle-train = "angle_predictor.cli.main:main"
+angle-predict = "angle_predictor.cli.predict:main"
 
 [tool.uv.build-backend]
-module-name = "dl_template"
+module-name = "angle_predictor"
 
 [tool.uv]
 default-groups = ["dev", "training"]
@@ -32,14 +33,24 @@ dev = [
 ]
 training = [
     "numpy>=2,<3",
+    "nvidia-ml-py>=12,<14",
+    "pillow>=10,<13",
+    "psutil>=5.9,<8",
+    "timm==1.0.30",
     "torch>=2.14,<2.15",
+    "torchvision>=0.29,<0.30",
 ]
-optimization = [
-    "optuna>=5,<6",
+synthetic-data = [
+    "numpy>=2,<3",
+    "opencv-python>=4.8,<5",
+    "pillow>=10,<13",
+    "tqdm>=4.66,<5",
 ]
-
 [tool.uv.sources]
 torch = [
+    { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
     { index = "pytorch-cu130", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
 ]
 

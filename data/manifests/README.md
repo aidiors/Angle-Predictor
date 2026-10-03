@@ -1,3 +1,8 @@
 # Dataset manifests
 
-Store small, version-controlled descriptions and identifiers for datasets here. Keep large source files outside the Git project and reference their location and immutable version in the experiment config; MLflow records the dataset metadata used by each run.
+There is no separate dataset manifest in this directory yet. Current experiment
+YAML files identify the dataset with `dataset.name`, `dataset.version`, and
+`dataset.source`; `params.data.root` points to the local files, and each run
+records the dataset metadata digest in MLflow. If a standalone manifest is
+added, keep it version-controlled and small; store large dataset files outside
+Git.
