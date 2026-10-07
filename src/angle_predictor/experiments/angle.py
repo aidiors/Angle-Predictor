@@ -4,7 +4,9 @@ import hashlib
 import json
 import math
 import shutil
+from collections.abc import Iterator
 from contextlib import suppress
+from typing import Protocol
 
 import mlflow
 import numpy as np
@@ -29,6 +31,7 @@ from angle_predictor.losses.angle import AngleLossFn, build_angle_loss
 from angle_predictor.models.line_angle import (
     AnglePredictor,
     build_angle_network,
+    load_initialization_weights,
     validate_initialization_source,
 )
 from angle_predictor.tracking.mlflow import (
@@ -111,6 +114,48 @@ def _train_angle_mae_deg(angle_error_sum_deg: torch.Tensor, sample_count: int) -
     return float(angle_error_sum_deg.item()) / sample_count
 
 
+class _AngleUpdateModel(Protocol):
+    def parameters(self, recurse: bool = True) -> Iterator[nn.Parameter]: ...
+
+    def forward_augmented(
+        self, images: torch.Tensor, targets: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]: ...
+
+
+def _train_angle_update(
+    model: _AngleUpdateModel,
+    optimizer: optim.Optimizer,
+    criterion: AngleLossFn,
+    microbatches: list[tuple[torch.Tensor, torch.Tensor]],
+    device: torch.device,
+    use_bf16: bool,
+    clip_grad_norm: float,
+    step: int,
+) -> tuple[float, torch.Tensor, int, torch.Tensor]:
+    sample_count = sum(len(images) for images, _ in microbatches)
+    if sample_count <= 0:
+        raise ValueError("An optimizer update requires at least one sample")
+    optimizer.zero_grad(set_to_none=True)
+    loss_sum = 0.0
+    angle_sum = torch.zeros((), device=device)
+    for images, targets in microbatches:
+        images = images.to(device, non_blocking=device.type == "cuda")
+        targets = targets.to(device, non_blocking=device.type == "cuda")
+        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
+            prediction, adjusted_targets = model.forward_augmented(images, targets)
+            loss = criterion(prediction, adjusted_targets)
+        if not torch.isfinite(loss):
+            raise FloatingPointError(f"Nonfinite training loss at step {step}")
+        (loss * (len(images) / sample_count)).backward()
+        loss_sum += loss.item() * len(images)
+        angle_sum += _angle_errors_deg(prediction.detach(), adjusted_targets).sum()
+    grad_norm = nn.utils.clip_grad_norm_(
+        model.parameters(), clip_grad_norm, error_if_nonfinite=True
+    )
+    optimizer.step()
+    return loss_sum, angle_sum, sample_count, grad_norm
+
+
 def _validate(
     model: AnglePredictor,
     loader: DataLoader,
@@ -160,7 +205,7 @@ def _build_model(params: AngleExperimentParams, input_size: tuple[int, int]) -> 
     if initialization is not None:
         payload = torch.load(initialization, map_location="cpu", weights_only=True)
         validate_initialization_source(payload, params)
-        model.load_state_dict(payload["model_state_dict"], strict=True)
+        load_initialization_weights(model, payload["model_state_dict"], params)
     return model
 
 
@@ -252,6 +297,9 @@ def run(config: ExperimentConfig) -> None:
                 "train_samples": len(train_data),
                 "val_samples": len(val_data),
                 "model_parameters": sum(parameter.numel() for parameter in model.parameters()),
+                "effective_batch_size": (
+                    params.data.batch_size * params.training.gradient_accumulation_steps
+                ),
             },
         }
     )
@@ -285,30 +333,27 @@ def run(config: ExperimentConfig) -> None:
     last_path = output_dir / "last.pt"
     validation_steps = set(params.training.validation_steps())
     for step in range(1, params.training.max_steps + 1):
-        try:
-            images, targets = next(train_iterator)
-        except StopIteration:
-            train_iterator = iter(train_loader)
-            images, targets = next(train_iterator)
-        images = images.to(device, non_blocking=device.type == "cuda")
-        targets = targets.to(device, non_blocking=device.type == "cuda")
-        optimizer.zero_grad(set_to_none=True)
-        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
-            prediction, adjusted_targets = model.forward_augmented(images, targets)
-            loss = criterion(prediction, adjusted_targets)
-        if not torch.isfinite(loss):
-            raise FloatingPointError(f"Nonfinite training loss at step {step}")
-        loss.backward()
-        grad_norm = nn.utils.clip_grad_norm_(
-            model.parameters(), params.training.clip_grad_norm, error_if_nonfinite=True
+        microbatches = []
+        for _ in range(params.training.gradient_accumulation_steps):
+            try:
+                microbatches.append(next(train_iterator))
+            except StopIteration:
+                train_iterator = iter(train_loader)
+                microbatches.append(next(train_iterator))
+        loss_sum, angle_sum, count, grad_norm = _train_angle_update(
+            model,
+            optimizer,
+            criterion,
+            microbatches,
+            device,
+            use_bf16,
+            params.training.clip_grad_norm,
+            step,
         )
-        optimizer.step()
         scheduler.step()
-        accumulated_loss += loss.item() * len(images)
-        accumulated_angle_error_deg += _angle_errors_deg(
-            prediction.detach(), adjusted_targets
-        ).sum()
-        accumulated_count += len(images)
+        accumulated_loss += loss_sum
+        accumulated_angle_error_deg += angle_sum
+        accumulated_count += count
 
         if step % params.training.log_every_steps == 0 or step == params.training.max_steps:
             rates = [group["lr"] for group in optimizer.param_groups]

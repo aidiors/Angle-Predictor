@@ -1,0 +1,136 @@
+{
+  "status": "PRIMARY",
+  "architecture": "ConvNeXt Tiny with four-view signed polar refinement",
+  "selection_reason": "MAE and P99 improved against the angular-only parent on seeds 42, 43 and 44 at matching total task updates",
+  "default_seed": 42,
+  "default_run_id": "8cb49fe9bdfd4ed59846579a1f26bb7c",
+  "default_seed_reason": "Keep seed 42 as the standard artifact rather than choosing the lowest-error seed",
+  "test_used": false,
+  "training_status": "PAUSED_BY_HUMAN",
+  "parameters": 34033768,
+  "model": {
+    "kind": "polar_refinement",
+    "backbone": "convnext_tiny",
+    "crop_size": [
+      384,
+      65
+    ],
+    "window_deg": 4.0,
+    "fine_channels": [
+      16,
+      32,
+      128
+    ],
+    "fine_angular_kernel": 23,
+    "fine_radial_kernel": 5,
+    "fine_radial_strides": [
+      2,
+      2,
+      2
+    ],
+    "fine_radial_antialias": true,
+    "radial_pool_mode": "mean_max",
+    "refinement_hidden": 128,
+    "fine_angular_antisymmetry": true,
+    "fine_radial_reflection": true,
+    "fine_reflection_readout": "offset",
+    "train_coarse": false
+  },
+  "training_stages": [
+    {
+      "stage": "coarse",
+      "new_steps": 5200,
+      "total_steps": 5200
+    },
+    {
+      "stage": "fresh_fine",
+      "new_steps": 5200,
+      "total_steps": 10400
+    },
+    {
+      "stage": "fine_continuation",
+      "new_steps": 5200,
+      "total_steps": 15600
+    }
+  ],
+  "checkpoints": [
+    {
+      "seed": 42,
+      "run_id": "8cb49fe9bdfd4ed59846579a1f26bb7c",
+      "checkpoint_artifact": "checkpoints/best.pt",
+      "checkpoint_sha256": "6bb6d7d349080ba60c6276bf14d8ce1e7d88b345df95bebb6c62a43500ae4c6d",
+      "source_run_ids": [
+        "db47db8609f34adb9d3c046b6cba9a2b",
+        "378e7efa31864e04a707555deeb2a7d3"
+      ],
+      "total_task_steps": 15600,
+      "validation_samples": 15000,
+      "mae_deg": 0.0016154095160826093,
+      "p99_deg": 0.014909802936017513,
+      "max_deg": 0.3381853401660919
+    },
+    {
+      "seed": 43,
+      "run_id": "f1544c335983455fb7d054fdf760881b",
+      "checkpoint_artifact": "checkpoints/best.pt",
+      "checkpoint_sha256": "b5c2b511b055df3e4ddcc1e86bbae8674730e7c8d27f297ee06063be5e52ec7b",
+      "source_run_ids": [
+        "71bd36d47d65476683d792892fdb1dce",
+        "6b6cd3df15914bbc8e2328d0a6850243"
+      ],
+      "total_task_steps": 15600,
+      "validation_samples": 15000,
+      "mae_deg": 0.0015057509552382953,
+      "p99_deg": 0.013886637054383755,
+      "max_deg": 0.14179076254367828
+    },
+    {
+      "seed": 44,
+      "run_id": "63d7756761634512af62e452058e73f7",
+      "checkpoint_artifact": "checkpoints/best.pt",
+      "checkpoint_sha256": "1e2c720928e0b22a84a1f551e8112addc331012867f42a2ede8fe43f97a40f1e",
+      "source_run_ids": [
+        "6fcb2b2c24f7478f99fd643c68504e82",
+        "c51f7be7533641f7a5bcb94a56f364b3"
+      ],
+      "total_task_steps": 15600,
+      "validation_samples": 15000,
+      "mae_deg": 0.0016975846935866855,
+      "p99_deg": 0.015719523653388023,
+      "max_deg": 0.5127615928649902
+    }
+  ],
+  "limitations": [
+    "Validation used adaptively for architecture selection",
+    "Seed 44 maximum error is worse than the preceding selected V1",
+    "Four fine views increase convolution and linear operation counts"
+  ],
+  "evidence": "docs/reports/four-view-refinement/README.md",
+  "historical_selection": "docs/reports/architecture-search/data/selected-model.json",
+  "operation_estimate": {
+    "scope": "Convolutions and linear layers only, excluding activations, reductions, sampling and transfers",
+    "input_rgb": [
+      1,
+      3,
+      256,
+      256
+    ],
+    "polar_input": [
+      1,
+      3,
+      384,
+      360
+    ],
+    "macs": 19948323584,
+    "gflops_two_per_mac": 39.896647168
+  },
+  "release": {
+    "tag": "v0.2.0",
+    "url": "https://github.com/aidiors/Angle-Predictor/releases/tag/v0.2.0",
+    "default_model": "V2",
+    "weights": "angle-predictor-v2.pt",
+    "weights_sha256": "6ab6dcf194df4bb12a3c7d4fa2e9fa7b27dca73bb5cb7621e47bcbf2f138c291",
+    "previous_model_weights": "angle-predictor-v1.pt",
+    "export": "Inference-only metadata with portable paths, unchanged model tensors"
+  }
+}

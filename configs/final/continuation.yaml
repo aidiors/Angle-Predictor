@@ -1,4 +1,4 @@
-name: continuation_seed42
+name: four_view_continuation_seed42
 entrypoint: angle_predictor.experiments.angle:run
 seed: 42
 tracking:
@@ -41,6 +41,9 @@ params:
     refinement_hidden: 128
     fine_angular_kernel: 23
     fine_radial_antialias: true
+    fine_angular_antisymmetry: true
+    fine_radial_reflection: true
+    fine_reflection_readout: offset
     train_coarse: false
   preprocessing:
     output_size:

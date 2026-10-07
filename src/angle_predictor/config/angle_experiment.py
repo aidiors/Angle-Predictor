@@ -41,9 +41,17 @@ class AngleModelConfig(BaseModel):
     dropout: float = Field(default=0.1, ge=0, lt=1)
     residual_scale: float = Field(default=0.25, ge=0)
     normalize_output: bool = True
+    feedback_mode: Literal["none", "fixed", "gated", "routed"] = "none"
 
     @model_validator(mode="after")
     def validate_stage_pruning(self) -> AngleModelConfig:
+        if self.feedback_mode != "none" and (
+            self.backbone_name != "convnext_tiny"
+            or self.out_index != 3
+            or self.final_stage_blocks is not None
+            or self.penultimate_stage_blocks is not None
+        ):
+            raise ValueError("Feedback requires the complete ConvNeXt Tiny stage hierarchy")
         if self.penultimate_stage_blocks is not None and (
             self.backbone_name != "convnext_tiny" or self.out_index not in {2, 3}
         ):
@@ -114,6 +122,13 @@ class PolarRefinementModelConfig(BaseModel):
     fine_radial_kernel: int = Field(default=5, gt=0)
     fine_radial_strides: tuple[Literal[1, 2], ...] | None = None
     radial_pool_bins: int = Field(default=1, gt=0)
+    radial_pool_mode: Literal["mean_max", "attention_max", "mean_top4"] = "mean_max"
+    fine_crop_source: Literal["polar", "cartesian"] = "polar"
+    fine_detail_skip: bool = False
+    fine_radial_reflection: bool = False
+    fine_reflection_readout: Literal["profile", "offset"] = "profile"
+    fine_geometric_residual: bool = False
+    fine_angular_antisymmetry: bool = False
     fine_radial_antialias: bool = False
     refinement_hidden: int = Field(default=128, gt=0)
     refinement_head: Literal["mlp", "local_mlp", "heatmap"] = "mlp"
@@ -148,6 +163,46 @@ class PolarRefinementModelConfig(BaseModel):
         radial_rows = (self.crop_size[0] + radial_stride - 1) // radial_stride
         if self.radial_pool_bins > radial_rows:
             raise ValueError("radial_pool_bins must not exceed the fine feature radial rows")
+        if self.radial_pool_mode == "attention_max" and self.radial_pool_bins != 1:
+            raise ValueError("attention_max requires one radial pool bin")
+        if self.radial_pool_mode == "mean_top4" and (self.radial_pool_bins != 1 or radial_rows < 4):
+            raise ValueError("mean_top4 requires one radial bin and at least four feature rows")
+        if self.fine_detail_skip and (
+            len(self.fine_channels) < 2
+            or self.radial_pool_bins != 1
+            or self.radial_pool_mode != "mean_max"
+        ):
+            raise ValueError(
+                "fine detail skip requires multiple layers and global mean/max pooling"
+            )
+        if self.fine_radial_reflection and (
+            self.radial_pool_bins != 1
+            or self.radial_pool_mode != "mean_max"
+            or self.fine_detail_skip
+        ):
+            raise ValueError(
+                "radial reflection requires global mean/max pooling without detail skip"
+            )
+        if self.fine_reflection_readout == "offset" and not self.fine_radial_reflection:
+            raise ValueError("offset reflection readout requires radial reflection")
+        if self.fine_geometric_residual and (
+            self.refinement_head != "mlp"
+            or self.radial_pool_bins != 1
+            or self.radial_pool_mode != "mean_max"
+            or self.fine_detail_skip
+            or self.fine_radial_reflection
+            or self.window_deg >= 45
+        ):
+            raise ValueError("Geometric residual requires plain global mean/max MLP and window <45")
+        if self.fine_angular_antisymmetry and (
+            self.refinement_head != "mlp"
+            or self.radial_pool_bins != 1
+            or self.radial_pool_mode != "mean_max"
+            or self.fine_detail_skip
+            or (self.fine_radial_reflection and self.fine_reflection_readout != "offset")
+            or self.fine_geometric_residual
+        ):
+            raise ValueError("Angular antisymmetry requires plain global mean/max MLP")
         if not self.coarse_model.normalize_output:
             raise ValueError("refinement requires a normalized coarse double-angle vector")
         return self
@@ -274,6 +329,7 @@ class AngleTrainingConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     max_steps: int = Field(default=5200, gt=0)
+    gradient_accumulation_steps: int = Field(default=1, gt=0)
     warmup_steps: int = Field(default=200, ge=0)
     clip_grad_norm: float = Field(default=1.0, gt=0, allow_inf_nan=False)
     precision: Literal["bf16", "fp32"] = "bf16"
@@ -284,6 +340,7 @@ class AngleTrainingConfig(BaseModel):
     keep_local_checkpoints: bool = False
     initialization_checkpoint: Path | None = None
     initialization_run_id: str | None = Field(default=None, min_length=32, max_length=32)
+    initialization_mode: Literal["full", "feedback_base"] = "full"
     coarse_lr_scale: float = Field(default=1.0, gt=0, le=1, allow_inf_nan=False)
 
     @model_validator(mode="after")
@@ -296,6 +353,8 @@ class AngleTrainingConfig(BaseModel):
             raise ValueError("validate_at_steps must not contain duplicates")
         if (self.initialization_checkpoint is None) != (self.initialization_run_id is None):
             raise ValueError("initialization requires both checkpoint and source run ID")
+        if self.initialization_mode == "feedback_base" and self.initialization_checkpoint is None:
+            raise ValueError("Feedback transfer requires a complete source checkpoint")
         return self
 
     def validation_steps(self) -> tuple[int, ...]:
@@ -331,6 +390,10 @@ class AngleExperimentParams(BaseModel):
 
     @model_validator(mode="after")
     def validate_model_input(self) -> AngleExperimentParams:
+        if self.training.initialization_mode == "feedback_base" and (
+            not isinstance(self.model, AngleModelConfig) or self.model.feedback_mode == "none"
+        ):
+            raise ValueError("Feedback transfer requires a feedback coarse model")
         cartesian = isinstance(self.model, CartesianConvNeXtConfig | CartesianRefinementConfig)
         if cartesian != (self.preprocessing.projection == "cartesian"):
             raise ValueError("Cartesian networks require Cartesian preprocessing")

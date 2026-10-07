@@ -33,8 +33,10 @@ class ArtifactClient:
     def log_artifacts(self, run_id: str, path: str, artifact_path: str) -> None:
         shutil.copytree(path, self.remote / artifact_path, dirs_exist_ok=True)
 
-    def log_dict(self, *args: object) -> None:
-        pass
+    def log_dict(self, run_id: str, value: dict, artifact_path: str) -> None:
+        destination = self.remote / artifact_path
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(json.dumps(value), encoding="utf-8")
 
     def log_metric(self, *args: object, **kwargs: object) -> None:
         pass
@@ -101,6 +103,11 @@ class ComparisonCleanupTests(unittest.TestCase):
             b"validation evidence",
         )
         self.assertIn("15600", (self.report / "results.csv").read_text())
+        manifest = json.loads(
+            (self.remote / "comparison/campaign/artifact-verification.json").read_text()
+        )
+        self.assertEqual(manifest["runs"][0]["run_id"], "a" * 32)
+        self.assertIn("checkpoints/best.pt", manifest["runs"][0]["verified_artifacts"])
 
     def test_corrupt_download_retains_local_checkpoints(self) -> None:
         with self.assertRaisesRegex(RuntimeError, "artifact differs"):

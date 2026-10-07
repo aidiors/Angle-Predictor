@@ -130,3 +130,9 @@ Thumbs.db
 !/docs/reports/cartesian-comparison/figures/clear-line.png
 !/docs/reports/cartesian-comparison/figures/faint-line.png
 !/docs/reports/cartesian-comparison/figures/near-seam.png
+
+!/docs/reports/four-view-refinement/README.md
+!/docs/reports/four-view-refinement/data/*.csv
+!/docs/reports/four-view-refinement/data/*.json
+!/docs/reports/four-view-refinement/figures/*.png
+!/docs/reports/four-view-refinement/figures/*.svg

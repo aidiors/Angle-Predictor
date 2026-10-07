@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -21,12 +23,34 @@ def main() -> None:
     parser.add_argument("--baseline-run", required=True)
     parser.add_argument("--candidate-run", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--cache-dir", type=Path, default=Path("outputs/architecture-evaluation"))
+    parser.add_argument("--cache-dir", type=Path)
     parser.add_argument("--export-predictions", action="store_true")
+    parser.add_argument(
+        "--tracking-uri", default=os.environ.get("MLFLOW_TRACKING_URI", "http://127.0.0.1:5001")
+    )
+    parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
+    parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--num-workers", type=int, default=4)
     args = parser.parse_args()
+    if args.batch_size < 1 or args.num_workers < 0:
+        parser.error("batch size must be positive and workers nonnegative")
+    torch.set_num_threads(4)
+    with tempfile.TemporaryDirectory(prefix="angle-validation-") as directory:
+        compare(args, args.cache_dir or Path(directory))
+
+
+def compare(args, cache_root: Path) -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    client = MlflowClient(tracking_uri="http://127.0.0.1:5001")
-    result = {"baseline_run": args.baseline_run, "candidate_run": args.candidate_run}
+    client = MlflowClient(tracking_uri=args.tracking_uri)
+    device = torch.device(args.device)
+    expected_indices = None
+    result = {
+        "baseline_run": args.baseline_run,
+        "candidate_run": args.candidate_run,
+        "device": str(device),
+        "split": "validation",
+        "test_used": False,
+    }
     all_errors = {}
     all_angles = {}
     histories = []
@@ -36,7 +60,10 @@ def main() -> None:
         run = client.get_run(run_id)
         if run.info.status != "FINISHED":
             raise ValueError(f"{name} run is not finished")
-        cache = (args.cache_dir / run_id).resolve()
+        end_time = run.info.end_time
+        if end_time is None:
+            raise ValueError(f"{name} run has no completion timestamp")
+        cache = (cache_root / run_id).resolve()
         cache.mkdir(parents=True, exist_ok=True)
         path = client.download_artifacts(run_id, "checkpoints/best.pt", str(cache))
         payload = torch.load(path, weights_only=True, map_location="cpu")
@@ -55,15 +82,27 @@ def main() -> None:
             train_fraction=params.data.train_fraction,
             val_fraction=params.data.val_fraction,
         )
-        loader = DataLoader(dataset, batch_size=32, num_workers=4, pin_memory=True)
-        model, _, precision = load_angle_predictor(path, torch.device("cuda"))
+        if expected_indices is not None and not np.array_equal(expected_indices, dataset.indices):
+            raise ValueError("Validation indices differ")
+        expected_indices = dataset.indices.copy()
+        loader = DataLoader(
+            dataset,
+            batch_size=args.batch_size,
+            num_workers=args.num_workers,
+            pin_memory=device.type == "cuda",
+        )
+        model, _, precision = load_angle_predictor(path, device)
         errors = []
         angles = []
         with torch.inference_mode():
             for images, targets in loader:
-                with torch.autocast("cuda", dtype=torch.bfloat16, enabled=precision == "bf16"):
-                    prediction = model(images.to("cuda", non_blocking=True))
-                errors.append(_angle_errors_deg(prediction, targets.to("cuda")).cpu().numpy())
+                with torch.autocast(
+                    device.type,
+                    dtype=torch.bfloat16,
+                    enabled=precision == "bf16" and device.type == "cuda",
+                ):
+                    prediction = model(images.to(device, non_blocking=True))
+                errors.append(_angle_errors_deg(prediction, targets.to(device)).cpu().numpy())
                 if args.export_predictions:
                     angles.append(
                         (0.5 * torch.atan2(prediction[:, 0], prediction[:, 1]))
@@ -84,8 +123,8 @@ def main() -> None:
             "p99_deg": float(np.quantile(errors, 0.99)),
             "max_deg": float(errors.max()),
             "fraction_above_0.1_deg": float((errors > 0.1).mean()),
-            "logged_best_mae_deg": float(run.data.tags["best_val_angle_mae_deg"]),
-            "wall_time_minutes": (run.info.end_time - run.info.start_time) / 60000,
+            "logged_best_mae_deg": float(run.data.tags.get("best_val_angle_mae_deg", "nan")),
+            "wall_time_minutes": (end_time - run.info.start_time) / 60000,
         }
         result[name] = summary
         print(name, json.dumps(summary), flush=True)
@@ -96,7 +135,8 @@ def main() -> None:
             )
         dataset.close()
         del model, payload
-        torch.cuda.empty_cache()
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
     result["candidate_minus_baseline_mae_deg"] = (
         result["candidate"]["mae_deg"] - result["baseline"]["mae_deg"]
     )

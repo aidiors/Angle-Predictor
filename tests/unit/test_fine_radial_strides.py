@@ -59,16 +59,26 @@ class FineRadialStrideTests(TestCase):
         side_effect=lambda **_: fixtures.ToyCoarse(),
     )
     def test_stride221_factory_frozen_gradients_and_portable_inference(self, _mock):
+        self._check_frozen_portable_stride((2, 2, 1), (16, 32, 64), 17)
+
+    @patch(
+        "angle_predictor.models.line_angle.LineAngleModel",
+        side_effect=lambda **_: fixtures.ToyCoarse(),
+    )
+    def test_stride122_selected_fine128_frozen_gradients_and_portable_inference(self, _mock):
+        self._check_frozen_portable_stride((1, 2, 2), (16, 32, 128), 23)
+
+    def _check_frozen_portable_stride(self, strides, channels, kernel):
         torch.manual_seed(42)
         with TemporaryDirectory() as directory:
             original, source, ancestor = fixtures.PolarRefinementTests().make_source(directory)
             settings = original.model_dump(mode="json")
             settings["model"].update(
                 crop_size=[384, 65],
-                fine_channels=[16, 32, 64],
-                fine_radial_strides=[2, 2, 1],
+                fine_channels=list(channels),
+                fine_radial_strides=list(strides),
                 fine_radial_antialias=True,
-                fine_angular_kernel=17,
+                fine_angular_kernel=kernel,
                 refinement_hidden=128,
                 window_deg=4.0,
             )
@@ -77,12 +87,12 @@ class FineRadialStrideTests(TestCase):
             convolutions = [
                 layer for layer in model.network.fine if isinstance(layer, torch.nn.Conv2d)
             ]
-            self.assertEqual([layer.stride for layer in convolutions], [(2, 1), (2, 1), (1, 1)])
+            self.assertEqual([layer.stride for layer in convolutions], [(s, 1) for s in strides])
             for layer in model.network.fine:
                 if isinstance(layer, torch.nn.Conv2d):
-                    self.assertEqual(layer.kernel_size, (5, 17))
-                    self.assertEqual(layer.padding, (2, 8))
-            self.assertEqual(model.network.correction[0].in_features, 8322)
+                    self.assertEqual(layer.kernel_size, (5, kernel))
+                    self.assertEqual(layer.padding, (2, kernel // 2))
+            self.assertEqual(model.network.correction[0].in_features, channels[-1] * 2 * 65 + 2)
             images = torch.randint(0, 256, (2, 3, 16, 16), dtype=torch.uint8)
             torch.testing.assert_close(model(images), source(images), rtol=0, atol=0)
             before = {k: v.clone() for k, v in model.network.coarse.state_dict().items()}
@@ -114,7 +124,7 @@ class FineRadialStrideTests(TestCase):
                         self.assertGreater(sum(g.abs().sum().item() for g in gradients), 0)
                 optimizer.step()
             hook.remove()
-            self.assertTrue(all(tuple(shape) == (2, 64, 96, 65) for shape in captured))
+            self.assertTrue(all(tuple(shape) == (2, channels[-1], 96, 65) for shape in captured))
             for key, value in model.network.coarse.state_dict().items():
                 torch.testing.assert_close(value, before[key], rtol=0, atol=0)
             model.eval()
@@ -122,7 +132,7 @@ class FineRadialStrideTests(TestCase):
             portable = params.model_dump(mode="json")
             portable["data"]["root"] = "Z:/missing-angle-data"
             portable["model"]["coarse_checkpoint"] = "Z:/missing-coarse.pt"
-            checkpoint = Path(directory) / "stride221.pt"
+            checkpoint = Path(directory) / "strides.pt"
             save_checkpoint(
                 model,
                 checkpoint,
@@ -140,7 +150,7 @@ class FineRadialStrideTests(TestCase):
                     for layer in restored.network.fine
                     if isinstance(layer, torch.nn.Conv2d)
                 ],
-                [(2, 1), (2, 1), (1, 1)],
+                [(s, 1) for s in strides],
             )
             torch.testing.assert_close(restored(images), expected, rtol=0, atol=0)
 
@@ -180,3 +190,32 @@ class FineRadialStrideTests(TestCase):
             features = torch.randn(2, 5, height, 65)
             self.assertEqual(original.fine(features).shape, (2, 64, 48, 65))
             self.assertEqual(dense.fine(features).shape, (2, 64, 96, 65))
+
+    def test_first_stride_preserves_parameters_and_halves_output_jump_with_less_context(self):
+        settings = dict(
+            crop_size=(384, 65),
+            fine_channels=(16, 32, 128),
+            fine_angular_kernel=23,
+            fine_radial_antialias=True,
+        )
+        torch.manual_seed(42)
+        original = PolarRefinementModel(fixtures.ToyCoarse(), **settings)
+        torch.manual_seed(42)
+        dense = PolarRefinementModel(
+            fixtures.ToyCoarse(), fine_radial_strides=(1, 2, 2), **settings
+        )
+        for key, value in original.state_dict().items():
+            torch.testing.assert_close(value, dense.state_dict()[key], rtol=0, atol=0)
+        self.assertEqual(
+            sum(p.numel() for p in original.parameters()),
+            sum(p.numel() for p in dense.parameters()),
+        )
+        field, jump = 1, 1
+        for layer in dense.fine:
+            if isinstance(layer, RadialAntialias):
+                field += 2 * jump
+            elif isinstance(layer, torch.nn.Conv2d):
+                field += (layer.kernel_size[0] - 1) * jump
+                jump *= layer.stride[0]
+        self.assertEqual((field, jump), (25, 4))
+        self.assertEqual(dense.fine(torch.randn(2, 5, 384, 65)).shape, (2, 128, 96, 65))

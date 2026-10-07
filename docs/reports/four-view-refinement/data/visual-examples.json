@@ -1,0 +1,35 @@
+{
+  "seed": 42,
+  "plain_run_id": "45d7e69f0a3a42eaa030a9a56e5dee62",
+  "four_view_run_id": "8cb49fe9bdfd4ed59846579a1f26bb7c",
+  "selection": "Same illustrative indices as the earlier RGB report",
+  "examples": [
+    {
+      "dataset_index": 100801,
+      "target_deg": 37.68131485455898,
+      "plain_error_deg": 0.0365082249045372,
+      "filename": "clear-line",
+      "plain_angle_deg": 37.71782302856445,
+      "four_view_angle_deg": 37.68133544921875,
+      "four_view_error_deg": 2.305188900209032e-05
+    },
+    {
+      "dataset_index": 141147,
+      "target_deg": 41.15921590276599,
+      "plain_error_deg": 0.034719567745923996,
+      "filename": "faint-line",
+      "plain_angle_deg": 41.12449645996094,
+      "four_view_angle_deg": 41.15890884399414,
+      "four_view_error_deg": 0.0003047971986234188
+    },
+    {
+      "dataset_index": 114431,
+      "target_deg": 0.008348247332606813,
+      "plain_error_deg": 0.6489987969398499,
+      "filename": "near-seam",
+      "plain_angle_deg": 179.35934448242188,
+      "four_view_angle_deg": 0.018254892900586128,
+      "four_view_error_deg": 0.009906648658216
+    }
+  ]
+}

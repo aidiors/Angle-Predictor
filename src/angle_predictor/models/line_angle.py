@@ -21,6 +21,7 @@ from angle_predictor.config.angle_experiment import (
 )
 from angle_predictor.data.angle_transforms import AngleBatchPreprocessor
 from angle_predictor.models.cartesian import CartesianConvNeXt, CartesianRefinement
+from angle_predictor.models.feedback import ConvNeXtFeedback
 from angle_predictor.models.polar_line import PolarLineModel
 from angle_predictor.models.polar_refinement import PolarRefinementModel
 
@@ -124,6 +125,7 @@ class LineAngleModel(nn.Module):
         normalize_output: bool = True,
         final_stage_blocks: int | None = None,
         penultimate_stage_blocks: int | None = None,
+        feedback_mode: Literal["none", "fixed", "gated", "routed"] = "none",
     ) -> None:
         super().__init__()
         self.backbone: Any = timm.create_model(
@@ -164,9 +166,19 @@ class LineAngleModel(nn.Module):
             residual_scale=residual_scale,
             normalize_output=normalize_output,
         )
+        self.feedback = None
+        if feedback_mode != "none":
+            if backbone_name != "convnext_tiny" or out_index != 3:
+                raise ValueError("Feedback requires ConvNeXt Tiny stage 4 output")
+            with torch.random.fork_rng(devices=[]):
+                self.feedback = ConvNeXtFeedback(feedback_mode)
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
-        features = self.backbone(image)[-1].float()
+        features = (
+            self.backbone(image)[-1]
+            if self.feedback is None
+            else self.feedback(self.backbone, image)
+        ).float()
         if image.device.type in {"cuda", "cpu"}:
             with torch.amp.autocast(device_type=image.device.type, enabled=False):
                 return self.head(features)
@@ -229,12 +241,27 @@ class AnglePredictor(nn.Module):
         self.inference_precision = inference_precision
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
+        if (
+            isinstance(self.network, PolarRefinementModel)
+            and self.network.fine_crop_source == "cartesian"
+        ):
+            polar, cartesian, _ = self.preprocessor.forward_with_cartesian(images)
+            return self.network(polar, cartesian)
         polar_images, _ = self.preprocessor(images, augment=False)
         return self.network(polar_images)
 
     def forward_augmented(
         self, images: torch.Tensor, targets: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor]:
+        if (
+            isinstance(self.network, PolarRefinementModel)
+            and self.network.fine_crop_source == "cartesian"
+        ):
+            polar, cartesian, adjusted_targets = self.preprocessor.forward_with_cartesian(
+                images, targets, augment=True
+            )
+            assert adjusted_targets is not None
+            return self.network(polar, cartesian), adjusted_targets
         polar_images, adjusted_targets = self.preprocessor(images, targets, augment=True)
         assert adjusted_targets is not None
         return self.network(polar_images), adjusted_targets
@@ -304,6 +331,13 @@ def build_angle_network(
             fine_radial_kernel=config.fine_radial_kernel,
             fine_radial_strides=config.fine_radial_strides,
             radial_pool_bins=config.radial_pool_bins,
+            radial_pool_mode=config.radial_pool_mode,
+            fine_crop_source=config.fine_crop_source,
+            fine_detail_skip=config.fine_detail_skip,
+            fine_radial_reflection=config.fine_radial_reflection,
+            fine_reflection_readout=config.fine_reflection_readout,
+            fine_geometric_residual=config.fine_geometric_residual,
+            fine_angular_antisymmetry=config.fine_angular_antisymmetry,
             fine_radial_antialias=config.fine_radial_antialias,
             refinement_hidden=config.refinement_hidden,
             refinement_head=config.refinement_head,
@@ -364,6 +398,15 @@ def validate_initialization_source(payload: dict[str, Any], params: AngleExperim
         raise ValueError("initialization checkpoint format/run ID differs from source lineage")
     expected_model = params.model.model_dump(exclude={"train_coarse"})
     source_model = source.model.model_dump(exclude={"train_coarse"})
+    if params.training.initialization_mode == "feedback_base":
+        if (
+            not isinstance(params.model, AngleModelConfig)
+            or not isinstance(source.model, AngleModelConfig)
+            or params.model.feedback_mode == "none"
+            or source.model.feedback_mode != "none"
+        ):
+            raise ValueError("Feedback initialization requires an original coarse source")
+        expected_model["feedback_mode"] = "none"
     if source_model != expected_model:
         raise ValueError("initialization checkpoint architecture differs from target")
     if source.data.split_seed != params.data.split_seed:
@@ -380,3 +423,18 @@ def validate_initialization_source(payload: dict[str, Any], params: AngleExperim
         raise ValueError("initialization checkpoint dataset fingerprint differs")
     if tuple(metadata["input_size"]) != tuple(json.loads(meta_bytes)["images_shape"][1:3]):
         raise ValueError("initialization checkpoint input geometry differs")
+
+
+def load_initialization_weights(
+    model: AnglePredictor, weights: dict, params: AngleExperimentParams
+) -> None:
+    if params.training.initialization_mode == "full":
+        model.load_state_dict(weights, strict=True)
+        return
+    missing = {key for key in model.state_dict() if key.startswith("network.feedback.")}
+    if not missing or set(model.state_dict()) - missing != set(weights):
+        raise ValueError(
+            "Feedback transfer must preserve every original backbone/head/buffer tensor"
+        )
+    merged = {**model.state_dict(), **weights}
+    model.load_state_dict(merged, strict=True)

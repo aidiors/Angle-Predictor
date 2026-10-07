@@ -16,6 +16,7 @@ from contextlib import suppress
 from copy import deepcopy
 from io import StringIO
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import torch
@@ -23,7 +24,7 @@ import yaml
 from mlflow import MlflowClient
 from torch.utils.data import DataLoader
 
-from angle_predictor.config.angle_experiment import AngleExperimentParams
+from angle_predictor.config.angle_experiment import AngleExperimentParams, CartesianRefinementConfig
 from angle_predictor.config.loader import load_config
 from angle_predictor.data.angle_dataset import AngleMemmapDataset
 from angle_predictor.engine.checkpoint import save_checkpoint
@@ -35,6 +36,7 @@ from angle_predictor.experiments.angle import (
 )
 from angle_predictor.inference.angle import load_angle_predictor
 from angle_predictor.losses.angle import build_angle_loss
+from angle_predictor.models.cartesian import CartesianRefinement
 
 
 def write_json(path: Path, value: object) -> None:
@@ -99,7 +101,9 @@ def finalize_comparison(client: MlflowClient, output: Path, report: Path) -> Non
         client.log_artifact(campaign_run, str(path), "comparison/campaign")
     for path in output.glob("features_seed*.npz"):
         client.log_artifact(campaign_run, str(path), "comparison/campaign")
-    client.log_dict(campaign_run, manifest, "comparison/campaign/artifact-verification.json")
+    client.log_dict(
+        campaign_run, {"runs": manifest}, "comparison/campaign/artifact-verification.json"
+    )
     rows = [
         {
             "model": result["stage"],
@@ -168,10 +172,12 @@ def preflight(config_dir: Path, output: Path) -> None:
                             ).hexdigest(),
                         },
                     )
+                    assert isinstance(params.model, CartesianRefinementConfig)
                     params.model.coarse_checkpoint = source_path
                     del coarse_model
                 model = _build_model(params, (256, 256)).cuda()
                 if stage == "refinement":
+                    assert isinstance(model.network, CartesianRefinement)
                     original = {
                         key: value.cpu().clone()
                         for key, value in model.network.coarse.state_dict().items()
@@ -194,6 +200,7 @@ def preflight(config_dir: Path, output: Path) -> None:
                     assert any(g.abs().sum() > 0 for g in gradients)
                     optimizer.step()
                 if stage == "refinement":
+                    assert isinstance(model.network, CartesianRefinement)
                     assert not model.network.coarse.training
                     assert all(p.grad is None for p in model.network.coarse.parameters())
                     assert all(
@@ -306,7 +313,9 @@ def audit_run(client: MlflowClient, run_id: str, steps: int) -> dict:
 def run_comparison(config_dir: Path, output: Path, references: list[str]) -> None:
     client = MlflowClient(tracking_uri="http://127.0.0.1:5001")
     state_path = output / "state.json"
-    state = json.loads(state_path.read_text()) if state_path.exists() else {"results": []}
+    state: dict[str, Any] = (
+        json.loads(state_path.read_text()) if state_path.exists() else {"results": []}
+    )
     state["runner_pid"] = os.getpid()
     ready = json.loads((output / "preflight.json").read_text())
     assert len(ready) == 6
@@ -384,6 +393,8 @@ def run_comparison(config_dir: Path, output: Path, references: list[str]) -> Non
                     if returncode:
                         raise RuntimeError(f"Training child failed with code {returncode}: {log}")
                 experiment = client.get_experiment_by_name(config.tracking.experiment_name)
+                if experiment is None:
+                    raise RuntimeError("Training experiment was not created")
                 matching = client.search_runs(
                     [experiment.experiment_id],
                     f"tags.mlflow.runName = '{config.name}'",

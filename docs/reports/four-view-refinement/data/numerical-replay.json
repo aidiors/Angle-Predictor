@@ -1,0 +1,72 @@
+{
+  "status": "PASSED",
+  "seed": 44,
+  "results": {
+    "bf16": {
+      "angular": {
+        "run_id": "c703fdc0654d499492c58a915b1421fb",
+        "checkpoint_sha256": "4b7e8d7fbf7f75babcdaf24318177d78c99cc35714c12eefb9888e8ad06b8f66",
+        "mae_deg": 0.0019394999021062707,
+        "p99_deg": 0.016750473529100418,
+        "max_deg": 1.031651258468628,
+        "above_0_1": 6,
+        "max_actual_coarse_reconstruction_difference_deg": 2.5613699108362198e-06,
+        "samples": 15000,
+        "task_updates": 0
+      },
+      "four_view": {
+        "run_id": "63d7756761634512af62e452058e73f7",
+        "checkpoint_sha256": "1e2c720928e0b22a84a1f551e8112addc331012867f42a2ede8fe43f97a40f1e",
+        "mae_deg": 0.0016976750312524852,
+        "p99_deg": 0.01576792635023594,
+        "max_deg": 0.5127453207969666,
+        "above_0_1": 7,
+        "max_actual_coarse_reconstruction_difference_deg": 2.561253495514393e-06,
+        "samples": 15000,
+        "task_updates": 0
+      },
+      "paired_actual_coarse_max_difference_deg": 0.0,
+      "four_vs_angular_change_percent": {
+        "mae_deg": -12.468413666387246,
+        "p99_deg": -5.865787478530149,
+        "max_deg": -50.298580398372195
+      }
+    },
+    "fp32": {
+      "angular": {
+        "run_id": "c703fdc0654d499492c58a915b1421fb",
+        "checkpoint_sha256": "4b7e8d7fbf7f75babcdaf24318177d78c99cc35714c12eefb9888e8ad06b8f66",
+        "mae_deg": 0.0019293447582290734,
+        "p99_deg": 0.016542257741093636,
+        "max_deg": 0.9451496601104736,
+        "above_0_1": 6,
+        "max_actual_coarse_reconstruction_difference_deg": 1.7075799405574799e-06,
+        "samples": 15000,
+        "task_updates": 0
+      },
+      "four_view": {
+        "run_id": "63d7756761634512af62e452058e73f7",
+        "checkpoint_sha256": "1e2c720928e0b22a84a1f551e8112addc331012867f42a2ede8fe43f97a40f1e",
+        "mae_deg": 0.0016950203111289605,
+        "p99_deg": 0.01582076959311962,
+        "max_deg": 0.5148862600326538,
+        "above_0_1": 6,
+        "max_actual_coarse_reconstruction_difference_deg": 2.5613117031753063e-06,
+        "samples": 15000,
+        "task_updates": 0
+      },
+      "paired_actual_coarse_max_difference_deg": 0.0,
+      "four_vs_angular_change_percent": {
+        "mae_deg": -12.145286429533575,
+        "p99_deg": -4.361485350223515,
+        "max_deg": -45.52330897812824
+      }
+    }
+  },
+  "sequential_gpu_only": true,
+  "test_used": false,
+  "task_updates": 0,
+  "no_weights_changed": true,
+  "tf32_disabled_for_diagnostic": true,
+  "official_bf16_metrics_preserved": true
+}

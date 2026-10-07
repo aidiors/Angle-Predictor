@@ -136,6 +136,32 @@ class AngleBatchPreprocessor(nn.Module):
         *,
         augment: bool = False,
     ) -> tuple[torch.Tensor, torch.Tensor | None]:
+        image, label = self._prepare(images, targets, augment=augment)
+        image = self.polar(image)
+        image = (image - self.mean) / self.std
+        return image, label
+
+    def forward_with_cartesian(
+        self,
+        images: torch.Tensor,
+        targets: torch.Tensor | None = None,
+        *,
+        augment: bool = False,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor | None]:
+        image, label = self._prepare(images, targets, augment=augment)
+        polar = (self.polar(image) - self.mean) / self.std
+        mean, std = self.mean, self.std
+        assert isinstance(mean, torch.Tensor) and isinstance(std, torch.Tensor)
+        cartesian = (image - mean) / std
+        return polar, cartesian, label
+
+    def _prepare(
+        self,
+        images: torch.Tensor,
+        targets: torch.Tensor | None,
+        *,
+        augment: bool,
+    ) -> tuple[torch.Tensor, torch.Tensor | None]:
         if images.ndim != 4 or images.shape[1] != 3:
             raise ValueError("Expected RGB images [B,3,H,W]")
         if images.dtype != torch.uint8:
@@ -150,8 +176,6 @@ class AngleBatchPreprocessor(nn.Module):
         if augment:
             assert label is not None
             image, label = self._augment(image, label)
-        image = self.polar(image)
-        image = (image - self.mean) / self.std
         return image, label
 
     def _augment(
